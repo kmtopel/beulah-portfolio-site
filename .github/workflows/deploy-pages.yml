@@ -3,6 +3,8 @@ name: Deploy Next.js to GitHub Pages
 on:
   push:
     branches: ["main"]
+  repository_dispatch:
+    types: ["sanity-content-update"]
   workflow_dispatch:
 
 permissions:

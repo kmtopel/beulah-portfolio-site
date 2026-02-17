@@ -47,3 +47,28 @@ npm run dev
 5. Push to `main` and GitHub Actions will deploy the `out/` directory.
 
 Note: GitHub Pages is static hosting, so server APIs and ISR webhooks are not available.
+
+## 5) Trigger deploys from Sanity content changes
+
+You can auto-deploy on publish by sending a `repository_dispatch` event to GitHub.
+
+1. Create a GitHub fine-grained personal access token with access to this repo.
+2. In Sanity project settings, create a webhook:
+   - URL: `https://api.github.com/repos/<OWNER>/<REPO>/dispatches`
+   - Method: `POST`
+   - Headers:
+     - `Accept: application/vnd.github+json`
+     - `Authorization: Bearer <YOUR_GITHUB_TOKEN>`
+     - `X-GitHub-Api-Version: 2022-11-28`
+   - Body:
+     ```json
+     {
+       "event_type": "sanity-content-update",
+       "client_payload": {
+         "source": "sanity"
+       }
+     }
+     ```
+3. Filter webhook triggers to relevant document types (for example: `project`, `skill`, `about`, `siteSettings`) and publish events.
+
+The deploy workflow in this repo already listens for `repository_dispatch` type `sanity-content-update`.
