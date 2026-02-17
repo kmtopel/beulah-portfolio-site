@@ -33,15 +33,7 @@ Recommended values:
 npm run dev
 ```
 
-## 4) Open Studio
-
-Visit `http://localhost:3000/studio` for setup guidance.
-
-For content editing, use:
-- Sanity Manage: `https://www.sanity.io/manage`
-- Optional separate Studio deploy: `npm run sanity deploy`
-
-## 5) Deploy to GitHub Pages
+## 4) Deploy to GitHub Pages
 
 1. Push this repo to GitHub.
 2. In GitHub repo settings:

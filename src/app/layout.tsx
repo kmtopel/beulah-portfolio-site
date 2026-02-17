@@ -32,9 +32,6 @@ export default function RootLayout({
             <Link href="/about" className="transition-opacity hover:opacity-70">
               About
             </Link>
-            <Link href="/studio" className="transition-opacity hover:opacity-70">
-              Studio
-            </Link>
           </nav>
         </header>
         <main className="mx-auto w-full max-w-[1020px] px-5 pb-20 pt-8">{children}</main>

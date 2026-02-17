@@ -6,10 +6,7 @@ export const client = createClient({
   dataset,
   projectId,
   token: process.env.SANITY_API_READ_TOKEN,
-  useCdn,
-  stega: {
-    studioUrl: "/studio"
-  }
+  useCdn
 });
 
 type SanityFetchArgs = {
