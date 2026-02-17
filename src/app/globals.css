@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f5f5ef;
+  --surface: #fffdf7;
+  --text: #181611;
+  --muted: #5e564a;
+  --border: #e7dfd2;
+  --brand: #17453a;
+  --brand-soft: #d9ece7;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
