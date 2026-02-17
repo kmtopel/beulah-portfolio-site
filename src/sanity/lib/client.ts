@@ -1,4 +1,4 @@
-import { createClient, type QueryParams } from "next-sanity";
+import { createClient } from "@sanity/client";
 import { apiVersion, dataset, hasRequiredEnv, projectId, useCdn } from "./env";
 
 export const client = createClient({
@@ -11,20 +11,24 @@ export const client = createClient({
 
 type SanityFetchArgs = {
   query: string;
-  params?: QueryParams;
+  params?: Record<string, string | number | boolean | null | undefined>;
   revalidate?: number;
 };
 
 export async function sanityFetch<T>({
   query,
-  params = {},
-  revalidate = 60
+  params = {}
 }: SanityFetchArgs): Promise<T | null> {
   if (!hasRequiredEnv) {
     return null;
   }
 
-  return client.fetch<T>(query, params, {
-    next: { revalidate }
-  });
+  try {
+    return await client.fetch<T>(query, params, {
+      cache: useCdn ? "force-cache" : "no-store"
+    });
+  } catch (error) {
+    console.warn("Sanity fetch failed, using fallback content.", error);
+    return null;
+  }
 }

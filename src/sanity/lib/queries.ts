@@ -1,6 +1,4 @@
-import { groq } from "next-sanity";
-
-export const projectsQuery = groq`
+export const projectsQuery = `
   *[_type == "project"] | order(year desc, _createdAt desc) {
     _id,
     title,
@@ -14,7 +12,7 @@ export const projectsQuery = groq`
   }
 `;
 
-export const projectBySlugQuery = groq`
+export const projectBySlugQuery = `
   *[_type == "project" && slug.current == $slug][0] {
     _id,
     title,
@@ -28,13 +26,13 @@ export const projectBySlugQuery = groq`
   }
 `;
 
-export const projectSlugsQuery = groq`
+export const projectSlugsQuery = `
   *[_type == "project" && defined(slug.current)]{
     "slug": slug.current
   }
 `;
 
-export const aboutQuery = groq`
+export const aboutQuery = `
   *[_type == "about"][0] {
     _id,
     title,
@@ -44,7 +42,7 @@ export const aboutQuery = groq`
   }
 `;
 
-export const skillsQuery = groq`
+export const skillsQuery = `
   *[_type == "skill"] | order(title asc) {
     _id,
     title,
@@ -61,7 +59,7 @@ export const skillsQuery = groq`
   }
 `;
 
-export const skillBySlugQuery = groq`
+export const skillBySlugQuery = `
   *[_type == "skill" && slug.current == $slug][0] {
     _id,
     title,
@@ -78,13 +76,13 @@ export const skillBySlugQuery = groq`
   }
 `;
 
-export const skillSlugsQuery = groq`
+export const skillSlugsQuery = `
   *[_type == "skill" && defined(slug.current)]{
     "slug": slug.current
   }
 `;
 
-export const siteSettingsQuery = groq`
+export const siteSettingsQuery = `
   *[_type == "siteSettings"][0] {
     _id,
     seoTitle,
