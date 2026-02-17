@@ -7,6 +7,5 @@ import { skillType } from "./skillType";
 export const schemaTypes: SchemaTypeDefinition[] = [
   projectType,
   skillType,
-  aboutType,
   siteSettingsType
 ];
