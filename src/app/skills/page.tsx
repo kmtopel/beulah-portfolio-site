@@ -19,8 +19,8 @@ export default async function SkillsPage() {
 
   return (
     <section>
-      <div className="mb-8 grid gap-4">
-        <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#e7dfd2] bg-[#fffdf7] px-3 py-1.5 text-xs text-[#5e564a]">
+      <div className="gap-4 grid mb-8">
+        <span className="inline-flex items-center gap-2 bg-[#fffdf7] px-3 py-1.5 border border-[#e7dfd2] rounded-full w-fit text-[#5e564a] text-xs">
           Skills
         </span>
         <h1 className="m-0 font-['Canela','Iowan_Old_Style','Times_New_Roman',serif] text-[clamp(2.2rem,6vw,4rem)] leading-none">
@@ -31,13 +31,13 @@ export default async function SkillsPage() {
           link to related projects.
         </p>
         {!hasRequiredEnv && (
-          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#e7dfd2] bg-[#fffdf7] px-3 py-1.5 text-xs text-[#5e564a]">
+          <span className="inline-flex items-center gap-2 bg-[#fffdf7] px-3 py-1.5 border border-[#e7dfd2] rounded-full w-fit text-[#5e564a] text-xs">
             Configure Sanity env vars to load live skill content.
           </span>
         )}
       </div>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
+      <div className="gap-4 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
         {skills.map((skill) => {
           const imageUrl = skill.coverImage ? urlForImage(skill.coverImage).width(800).height(600).url() : null;
 
@@ -45,7 +45,7 @@ export default async function SkillsPage() {
             <Link
               key={skill._id}
               href={skill.slug?.current ? `/skills/${skill.slug.current}` : "#"}
-              className="grid overflow-hidden rounded-[14px] border border-[#e7dfd2] bg-[#fffdf7] [grid-template-rows:180px_auto]"
+              className="grid bg-[#fffdf7] border border-[#e7dfd2] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto]"
             >
               {imageUrl ? (
                 <Image
@@ -53,15 +53,15 @@ export default async function SkillsPage() {
                   alt={skill.coverImage?.alt || skill.title}
                   width={800}
                   height={600}
-                  className="h-full w-full bg-[linear-gradient(120deg,#d9ece7,#f6f0df)] object-cover"
+                  className="bg-[linear-gradient(120deg,#d9ece7,#f6f0df)] size-full object-cover"
                 />
               ) : (
-                <div className="h-full w-full bg-[linear-gradient(120deg,#d9ece7,#f6f0df)]" />
+                <div className="bg-[linear-gradient(120deg,#d9ece7,#f6f0df)] size-full" />
               )}
 
-              <div className="grid gap-2 p-4">
+              <div className="gap-2 grid p-4">
                 <h2 className="m-0 text-[1.05rem]">{skill.title}</h2>
-                <div className="text-sm text-[#5e564a]">
+                <div className="text-[#5e564a] text-sm">
                   {skill.category || "Skill"}
                   {skill.summary ? ` · ${skill.summary}` : ""}
                 </div>

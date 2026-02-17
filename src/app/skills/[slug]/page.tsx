@@ -61,15 +61,15 @@ export default async function SkillPage({ params }: PageProps) {
   const coverUrl = skill.coverImage ? urlForImage(skill.coverImage).width(1400).height(1000).url() : null;
 
   return (
-    <article className="grid gap-5">
-      <Link href="/skills" className="w-fit text-[#17453a] transition-opacity hover:opacity-70">
+    <article className="gap-5 grid">
+      <Link href="/skills" className="hover:opacity-70 w-fit text-[#17453a] transition-opacity">
         Back to all skills
       </Link>
       <header>
         <h1 className="m-0 font-['Canela','Iowan_Old_Style','Times_New_Roman',serif] text-[clamp(2.2rem,6vw,4rem)] leading-none">
           {skill.title}
         </h1>
-        <p className="mt-3 text-sm text-[#5e564a]">{skill.category || "Skill"}</p>
+        <p className="mt-3 text-[#5e564a] text-sm">{skill.category || "Skill"}</p>
       </header>
 
       {coverUrl ? (
@@ -78,26 +78,26 @@ export default async function SkillPage({ params }: PageProps) {
           alt={skill.coverImage?.alt || skill.title}
           width={1400}
           height={1000}
-          className="w-full rounded-[14px] border border-[#e7dfd2]"
+          className="border border-[#e7dfd2] rounded-[14px] w-full"
         />
       ) : null}
 
       {skill.summary ? <p className="max-w-[62ch] leading-relaxed">{skill.summary}</p> : null}
 
-      <div className="max-w-none leading-relaxed [&_p]:mb-4 [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6">
+      <div className="[&_p]:mb-4 [&_ul]:mb-4 [&_ul]:pl-6 max-w-none leading-relaxed [&_ul]:list-disc">
         <PortableContent value={skill.description} />
       </div>
 
       {skill.relatedProjects?.length ? (
-        <section className="rounded-[14px] border border-[#e7dfd2] bg-[#fffdf7] p-4">
+        <section className="bg-[#fffdf7] p-4 border border-[#e7dfd2] rounded-[14px]">
           <h2 className="m-0 text-lg">Related Projects</h2>
-          <ul className="mb-0 mt-3 list-disc pl-6">
+          <ul className="mt-3 mb-0 pl-6 list-disc">
             {skill.relatedProjects.map((project) => (
               <li key={project._id} className="py-0.5">
                 {project.slug?.current ? (
                   <Link
-                    href={`/work/${project.slug.current}`}
-                    className="text-[#17453a] transition-opacity hover:opacity-70"
+                    href={`/projects/${project.slug.current}`}
+                    className="hover:opacity-70 text-[#17453a] transition-opacity"
                   >
                     {project.title}
                   </Link>

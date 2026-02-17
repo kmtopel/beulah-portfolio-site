@@ -58,7 +58,7 @@ export default async function ProjectPage({ params }: PageProps) {
     notFound();
   }
 
-  const coverUrl = project.coverImage ? urlForImage(project.coverImage).width(1400).height(1000).url() : null;
+  const coverUrl = project.featuredImage ? urlForImage(project.featuredImage).width(1400).height(1000).url() : null;
 
   return (
     <article className="grid gap-5">
@@ -78,7 +78,7 @@ export default async function ProjectPage({ params }: PageProps) {
       {coverUrl ? (
         <Image
           src={coverUrl}
-          alt={project.coverImage?.alt || project.title}
+          alt={project.featuredImage?.alt || project.title}
           width={1400}
           height={1000}
           className="w-full rounded-[14px] border border-[#e7dfd2]"

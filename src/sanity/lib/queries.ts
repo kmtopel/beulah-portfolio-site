@@ -5,7 +5,7 @@ export const projectsQuery = `
     slug,
     year,
     description,
-    coverImage,
+    "featuredImage": coalesce(featuredImage, coverImage),
     gallery,
     tags,
     externalUrl
@@ -19,7 +19,7 @@ export const projectBySlugQuery = `
     slug,
     year,
     description,
-    coverImage,
+    "featuredImage": coalesce(featuredImage, coverImage),
     gallery,
     tags,
     externalUrl
@@ -85,6 +85,9 @@ export const skillSlugsQuery = `
 export const siteSettingsQuery = `
   *[_type == "siteSettings"][0] {
     _id,
+    headerBrandLabel,
+    headerBrandHref,
+    headerNavLinks,
     seoTitle,
     seoDescription,
     socialLinks

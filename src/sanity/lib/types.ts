@@ -15,7 +15,7 @@ export type Project = {
   };
   year?: number;
   description?: unknown[];
-  coverImage?: SanityImage;
+  featuredImage?: SanityImage;
   gallery?: SanityImage[];
   tags?: string[];
   externalUrl?: string;
@@ -50,6 +50,12 @@ export type Skill = {
 
 export type SiteSettings = {
   _id: string;
+  headerBrandLabel?: string;
+  headerBrandHref?: string;
+  headerNavLinks?: Array<{
+    label?: string;
+    href?: string;
+  }>;
   seoTitle?: string;
   seoDescription?: string;
   socialLinks?: Array<{

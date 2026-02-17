@@ -4,7 +4,7 @@ This repo is scaffolded with:
 - Next.js App Router + TypeScript
 - Static export compatible with GitHub Pages
 - Starter schemas for `project`, `about`, and `siteSettings`
-- Portfolio pages: `/`, `/work/[slug]`, `/skills/[slug]`, `/about`
+- Portfolio pages: `/`, `/projects/[slug]`, `/skills/[slug]`, `/about`
 
 ## 1) Install dependencies
 

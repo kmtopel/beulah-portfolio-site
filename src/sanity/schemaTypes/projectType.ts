@@ -27,8 +27,8 @@ export const projectType = defineType({
       type: "number"
     }),
     defineField({
-      name: "coverImage",
-      title: "Cover image",
+      name: "featuredImage",
+      title: "Featured image",
       type: "image",
       options: {
         hotspot: true
@@ -81,7 +81,7 @@ export const projectType = defineType({
     select: {
       title: "title",
       subtitle: "year",
-      media: "coverImage"
+      media: "featuredImage"
     },
     prepare(selection) {
       const { title, subtitle, media } = selection;
