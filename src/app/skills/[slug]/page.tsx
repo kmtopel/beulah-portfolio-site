@@ -4,12 +4,8 @@ import { notFound } from "next/navigation";
 import { PortableContent } from "@/components/portable-content";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/image";
-import { skillBySlugQuery, skillSlugsQuery } from "@/sanity/lib/queries";
+import { skillBySlugQuery } from "@/sanity/lib/queries";
 import type { Skill } from "@/sanity/lib/types";
-
-export const revalidate = 120;
-export const dynamicParams = false;
-export const dynamic = "force-static";
 
 type PageProps = {
   params: {
@@ -17,20 +13,11 @@ type PageProps = {
   };
 };
 
-export async function generateStaticParams() {
-  const slugs = await sanityFetch<Array<{ slug: string }>>({
-    query: skillSlugsQuery,
-    revalidate
-  });
-
-  return slugs?.map((item) => ({ slug: item.slug })) || [];
-}
-
 async function getSkill(slug: string): Promise<Skill | null> {
   return sanityFetch<Skill>({
     query: skillBySlugQuery,
     params: { slug },
-    revalidate
+    revalidate: 120
   });
 }
 
