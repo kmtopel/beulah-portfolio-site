@@ -23,7 +23,7 @@ export default async function SkillsPage() {
         <span className="inline-flex items-center gap-2 bg-[#fffdf7] px-3 py-1.5 border border-[#e7dfd2] rounded-full w-fit text-[#5e564a] text-xs">
           Skills
         </span>
-        <h1 className="m-0 font-['Canela','Iowan_Old_Style','Times_New_Roman',serif] text-[clamp(2.2rem,6vw,4rem)] leading-none">
+        <h1 className="type-display m-0 text-[clamp(2.4rem,6vw,4.2rem)] leading-[0.9]">
           Core Skills
         </h1>
         <p className="max-w-[62ch] text-[#5e564a]">

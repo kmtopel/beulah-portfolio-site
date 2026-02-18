@@ -1,24 +1,29 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import { Archivo_Narrow, Bodoni_Moda, Manrope } from "next/font/google";
 import Header from "@/components/header";
 import { sanityFetch } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import type { SiteSettings } from "@/sanity/lib/types";
+import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "Beulah Peter's Portfolio Site",
-  description: "Portfolio website powered by Next.js and Sanity"
-};
+const bodyFont = Manrope({
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap"
+});
 
-const fallbackHeader = {
-  brandLabel: "Beulah",
-  brandHref: "/",
-  navLinks: [
-    { label: "Projects", href: "/" },
-    { label: "Skills", href: "/skills" },
-    { label: "About", href: "/about" }
-  ]
-};
+const displayFont = Bodoni_Moda({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+  weight: ["500", "600", "700", "800"]
+});
+
+const accentFont = Archivo_Narrow({
+  subsets: ["latin"],
+  variable: "--font-accent",
+  display: "swap",
+  weight: ["500", "600", "700"]
+});
 
 export default async function RootLayout({
   children
@@ -26,18 +31,19 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const siteSettings = await sanityFetch<SiteSettings>({ query: siteSettingsQuery, revalidate: 300 });
-
-  const brandLabel = siteSettings?.headerBrandLabel || fallbackHeader.brandLabel;
-  const brandHref = siteSettings?.headerBrandHref || fallbackHeader.brandHref;
   const navLinks =
-    siteSettings?.headerNavLinks
-      ?.filter((item): item is { label: string; href: string } => Boolean(item?.label && item?.href))
-      .map((item) => ({ label: item.label, href: item.href })) || fallbackHeader.navLinks;
+    siteSettings?.headerNavLinks?.flatMap((item) =>
+      item?.label && item?.href ? [{ label: item.label, href: item.href }] : []
+    ) ?? [];
 
   return (
     <html lang="en">
-      <body className="bg-[radial-gradient(circle_at_top_right,_#ffefd6,_#f5f5ef_45%)] m-0 font-['Avenir_Next','Avenir','Helvetica_Neue',sans-serif] text-[#181611]">
-        <Header brandLabel={brandLabel} brandHref={brandHref} navLinks={navLinks} />
+      <body
+        className={`${bodyFont.variable} ${displayFont.variable} ${accentFont.variable} bg-white text-[var(--dark-olive-green)] antialiased`}
+      >
+        <Header
+          navLinks={navLinks}
+        />
         <main className="mx-auto px-5 pt-8 pb-20 w-full max-w-[1020px]">{children}</main>
       </body>
     </html>

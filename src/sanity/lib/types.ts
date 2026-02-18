@@ -51,7 +51,6 @@ export type Skill = {
 export type SiteSettings = {
   _id: string;
   headerBrandLabel?: string;
-  headerBrandHref?: string;
   headerNavLinks?: Array<{
     label?: string;
     href?: string;
@@ -62,4 +61,21 @@ export type SiteSettings = {
     label?: string;
     url?: string;
   }>;
+};
+
+export type HeroBlock = {
+  _type: "heroBlock";
+  _key: string;
+  title?: string;
+  subtitle?: string;
+  mainImage?: SanityImage;
+};
+
+export type Page = {
+  _id: string;
+  title: string;
+  slug?: {
+    current: string;
+  };
+  sections?: HeroBlock[];
 };

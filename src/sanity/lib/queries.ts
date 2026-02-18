@@ -83,13 +83,39 @@ export const skillSlugsQuery = `
 `;
 
 export const siteSettingsQuery = `
-  *[_type == "siteSettings"][0] {
+  coalesce(
+    *[_type == "siteSettings" && _id == "siteSettings"][0],
+    *[_type == "siteSettings"][0]
+  ) {
     _id,
     headerBrandLabel,
-    headerBrandHref,
     headerNavLinks,
     seoTitle,
     seoDescription,
     socialLinks
+  }
+`;
+
+export const pageBySlugQuery = `
+  *[_type == "page" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    sections[]{
+      ...,
+      _type == "heroBlock" => {
+        _key,
+        _type,
+        title,
+        subtitle,
+        mainImage
+      }
+    }
+  }
+`;
+
+export const pageSlugsQuery = `
+  *[_type == "page" && defined(slug.current)]{
+    "slug": slug.current
   }
 `;

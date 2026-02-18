@@ -66,7 +66,7 @@ export default async function ProjectPage({ params }: PageProps) {
         Back to all work
       </Link>
       <header>
-        <h1 className="m-0 font-['Canela','Iowan_Old_Style','Times_New_Roman',serif] text-[clamp(2.2rem,6vw,4rem)] leading-none">
+        <h1 className="type-display m-0 text-[clamp(2.4rem,6vw,4.2rem)] leading-[0.9]">
           {project.title}
         </h1>
         <p className="mt-3 text-sm text-[#5e564a]">
