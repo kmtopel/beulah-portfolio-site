@@ -47,7 +47,7 @@ export default function Header({ navLinks }: HeaderProps) {
                 href={item.href}
                 target="_blank"
                 rel="noreferrer"
-                className="hover:opacity-70 transition-opacity"
+                className="hover:opacity-70 text-lg transition-opacity"
               >
                 {item.label}
               </a>
@@ -55,7 +55,7 @@ export default function Header({ navLinks }: HeaderProps) {
               <Link
                 key={`${item.label}-${item.href}`}
                 href={item.href}
-                className="hover:opacity-70 transition-opacity"
+                className="hover:opacity-70 text-lg transition-opacity"
               >
                 {item.label}
               </Link>
@@ -74,7 +74,7 @@ export default function Header({ navLinks }: HeaderProps) {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setIsOpen(false)}
-                  className="hover:opacity-70 transition-opacity"
+                  className="hover:opacity-70 text-2xl transition-opacity"
                 >
                   {item.label}
                 </a>
@@ -83,7 +83,7 @@ export default function Header({ navLinks }: HeaderProps) {
                   key={`mobile-${item.label}-${item.href}`}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="hover:opacity-70 transition-opacity"
+                  className="hover:opacity-70 text-2xl transition-opacity"
                 >
                   {item.label}
                 </Link>
