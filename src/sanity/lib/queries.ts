@@ -109,6 +109,17 @@ export const pageBySlugQuery = `
         title,
         subtitle,
         mainImage
+      },
+      _type == "featuredProjectsBlock" => {
+        _key,
+        _type,
+        projects[]->{
+          _id,
+          title,
+          slug,
+          year,
+          "featuredImage": coalesce(featuredImage, coverImage)
+        }
       }
     }
   }

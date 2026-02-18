@@ -16,10 +16,14 @@ export default function Hero({ heroData }: HeroProps) {
   const sectionStyles = {
     "--hero-mobile-size": "clamp(14rem, calc(100vw - 4rem), 20rem)",
     "--hero-desktop-size": "clamp(18rem, 35vw, 23.75rem)",
+    "--hero-desktop-gap": "clamp(2.5rem, 6vw, 4.5rem)",
   } as CSSProperties;
 
   return (
-    <section className="relative" style={sectionStyles}>
+    <section
+      className="relative lg:mt-[var(--hero-desktop-gap)] lg:mb-[var(--hero-desktop-gap)]"
+      style={sectionStyles}
+    >
       <div className="lg:hidden z-20 relative mx-auto mb-[calc(var(--hero-mobile-size)*-0.5)] w-[var(--hero-mobile-size)]">
         <div className="relative shadow-[0_24px_50px_rgba(0,0,0,0.18)] border-[10px] border-white rounded-full w-full aspect-square overflow-hidden">
           {imageUrl ? (

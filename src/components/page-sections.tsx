@@ -1,8 +1,9 @@
+import FeaturedProjects from "@/components/featured-projects";
 import Hero from "@/components/hero";
-import type { HeroBlock } from "@/sanity/lib/types";
+import type { PageSection } from "@/sanity/lib/types";
 
 type PageSectionsProps = {
-  sections: HeroBlock[];
+  sections: PageSection[];
 };
 
 export default function PageSections({ sections }: PageSectionsProps) {
@@ -11,6 +12,10 @@ export default function PageSections({ sections }: PageSectionsProps) {
       {sections.map((section) => {
         if (section._type === "heroBlock") {
           return <Hero key={section._key} heroData={section} />;
+        }
+
+        if (section._type === "featuredProjectsBlock") {
+          return <FeaturedProjects key={section._key} projects={section.projects || []} />;
         }
 
         return (

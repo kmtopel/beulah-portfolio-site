@@ -22,11 +22,6 @@ export const projectType = defineType({
       validation: (rule) => rule.required()
     }),
     defineField({
-      name: "year",
-      title: "Year",
-      type: "number"
-    }),
-    defineField({
       name: "featuredImage",
       title: "Featured image",
       type: "image",
@@ -52,6 +47,18 @@ export const projectType = defineType({
         })
       ]
     }),
+    {
+      name: "shortSummary",
+      title: "Short summary",
+      type: "string",
+      validation: (rule) => rule.max(160).warning("Keep it under 160 characters for best display")
+    },
+    defineField({
+      name: "description",
+      title: "Description",
+      type: "array",
+      of: [defineArrayMember({ type: "block" })]
+    }),
     defineField({
       name: "gallery",
       title: "Gallery",
@@ -69,12 +76,6 @@ export const projectType = defineType({
           ]
         })
       ]
-    }),
-    defineField({
-      name: "description",
-      title: "Description",
-      type: "array",
-      of: [defineArrayMember({ type: "block" })]
     }),
     defineField({
       name: "tags",

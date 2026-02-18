@@ -71,11 +71,29 @@ export type HeroBlock = {
   mainImage?: SanityImage;
 };
 
+export type FeaturedProjectSummary = {
+  _id: string;
+  title: string;
+  slug?: {
+    current: string;
+  };
+  year?: number;
+  featuredImage?: SanityImage;
+};
+
+export type FeaturedProjectsBlock = {
+  _type: "featuredProjectsBlock";
+  _key: string;
+  projects?: FeaturedProjectSummary[];
+};
+
+export type PageSection = HeroBlock | FeaturedProjectsBlock;
+
 export type Page = {
   _id: string;
   title: string;
   slug?: {
     current: string;
   };
-  sections?: HeroBlock[];
+  sections?: PageSection[];
 };

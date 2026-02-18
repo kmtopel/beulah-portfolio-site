@@ -1,44 +1,42 @@
-// series of 3 cards with image, title, description, and link to project page
 import Image from "next/image";
 import Link from "next/link";
-
-export interface FeaturedProject {
-  title: string;
-  description: string;
-  imageUrl?: string;
-  href: string;
-}
+import { urlForImage } from "@/sanity/lib/image";
+import type { FeaturedProjectSummary } from "@/sanity/lib/types";
 
 interface FeaturedProjectsProps {
-  projects: FeaturedProject[];
+  projects: FeaturedProjectSummary[];
 }
 
 export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
+  if (!projects?.length) {
+    return null;
+  }
+
   return (
-    <section className="my-20">
+    <section className="mt-20 lg:mt-28 mb-20 lg:mb-24">
       <h2 className="mb-10 font-bold text-3xl type-display">Featured Projects</h2>
       <div className="gap-8 grid md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <Link
-            key={project.title}
-            href={project.href}
-            className="group block shadow-lg hover:shadow-xl rounded-lg overflow-hidden transition-shadow"
+            key={project._id}
+            href={project.slug?.current ? `/projects/${project.slug.current}` : "#"}
+            className="group block shadow-lg hover:shadow-xl border border-[var(--vanilla-custard)] rounded-lg overflow-hidden transition-shadow"
           >
             <div className="relative h-48">
-              {project.imageUrl ? (
+              {project.featuredImage ? (
                 <Image
-                  src={project.imageUrl || ""}
+                  src={urlForImage(project.featuredImage).width(800).height(600).url()}
                   alt={project.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform"
                 />
               ) : (
-                <div className="bg-gray-200 size-full" />
+                <div className="bg-[linear-gradient(120deg,var(--tea-green),var(--tertiary))] size-full" />
               )}
             </div>
             <div className="p-4">
               <h3 className="mb-2 font-semibold text-xl">{project.title}</h3>
-              <p className="text-gray-600">{project.description}</p>
+              <p>{project.shortSummary}</p>
             </div>
           </Link>
         ))}
