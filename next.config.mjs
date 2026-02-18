@@ -1,9 +1,10 @@
 const isGitHubActions = process.env.GITHUB_ACTIONS === "true";
 const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] || "";
+const shouldExport = isGitHubActions || process.env.NEXT_OUTPUT_EXPORT === "true";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  ...(shouldExport ? { output: "export" } : {}),
   trailingSlash: true,
   images: {
     unoptimized: true,
