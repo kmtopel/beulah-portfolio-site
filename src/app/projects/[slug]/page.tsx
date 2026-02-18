@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PortableContent } from "@/components/portable-content";
 import { sanityFetch } from "@/sanity/lib/client";
-import { hasRequiredEnv } from "@/sanity/lib/env";
 import { urlForImage } from "@/sanity/lib/image";
 import { projectBySlugQuery, projectSlugsQuery } from "@/sanity/lib/queries";
 import type { Project } from "@/sanity/lib/types";
