@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { urlForImage } from "@/sanity/lib/image";
 import type { FeaturedProjectSummary } from "@/sanity/lib/types";
+import { ArrowRight } from "lucide-react";
 
 interface FeaturedProjectsProps {
   projects: FeaturedProjectSummary[];
@@ -43,7 +44,12 @@ export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
           </Link>
         ))}
       </div>
-      <a href="/projects" className="inline-block mt-4 text-center hover:underline">See all projects</a>
+      <div className="mt-4 w-full text-center">
+        <a href="/projects" className="inline-block mt-4 underline">
+          <span>See all projects</span>
+          <ArrowRight className="inline-block ml-1" size={16} />
+        </a>
+      </div>
     </section>
   );
 }
