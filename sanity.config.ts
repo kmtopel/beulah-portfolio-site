@@ -1,21 +1,11 @@
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
+import { getSanityProjectConfig } from "./sanity.env";
 import { schemaTypes } from "./src/sanity/schemaTypes";
 import { singletonActions, singletonTypes, structure } from "./src/sanity/structure";
-const projectId =
-  import.meta.env.SANITY_STUDIO_PROJECT_ID ||
-  process.env.SANITY_STUDIO_PROJECT_ID ||
-  import.meta.env.NEXT_PUBLIC_SANITY_PROJECT_ID ||
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ||
-  "";
 
-const dataset =
-  import.meta.env.SANITY_STUDIO_DATASET ||
-  process.env.SANITY_STUDIO_DATASET ||
-  import.meta.env.NEXT_PUBLIC_SANITY_DATASET ||
-  process.env.NEXT_PUBLIC_SANITY_DATASET ||
-  "production";
+const { projectId, dataset } = getSanityProjectConfig();
 
 if (!projectId) {
   throw new Error(
