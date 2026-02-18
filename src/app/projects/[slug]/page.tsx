@@ -10,6 +10,7 @@ import { ChevronLeft } from "lucide-react";
 
 export const revalidate = 60;
 export const dynamicParams = false;
+export const dynamic = "force-static";
 
 type PageProps = {
   params: {

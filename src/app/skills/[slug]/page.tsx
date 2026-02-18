@@ -9,6 +9,7 @@ import type { Skill } from "@/sanity/lib/types";
 
 export const revalidate = 120;
 export const dynamicParams = false;
+export const dynamic = "force-static";
 
 type PageProps = {
   params: {
