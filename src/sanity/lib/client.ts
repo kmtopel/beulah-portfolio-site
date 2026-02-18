@@ -28,7 +28,7 @@ export async function sanityFetch<T>({
       cache: useCdn ? "force-cache" : "no-store"
     });
   } catch (error) {
-    console.warn("Sanity fetch failed, using fallback content.", error);
+    console.warn("Sanity fetch failed.", error);
     return null;
   }
 }

@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { sanityFetch } from "@/sanity/lib/client";
-import { fallbackProjects } from "@/sanity/lib/fallbacks";
 import { urlForImage } from "@/sanity/lib/image";
 import { projectsQuery } from "@/sanity/lib/queries";
 import type { Project } from "@/sanity/lib/types";
@@ -10,7 +9,7 @@ export const revalidate = 60;
 
 async function getProjects(): Promise<Project[]> {
   const projects = await sanityFetch<Project[]>({ query: projectsQuery, revalidate });
-  return projects?.length ? projects : fallbackProjects;
+  return projects || [];
 }
 
 export default async function ProjectsPage() {

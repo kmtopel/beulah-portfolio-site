@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { sanityFetch } from "@/sanity/lib/client";
 import { hasRequiredEnv } from "@/sanity/lib/env";
-import { fallbackSkills } from "@/sanity/lib/fallbacks";
 import { urlForImage } from "@/sanity/lib/image";
 import { skillsQuery } from "@/sanity/lib/queries";
 import type { Skill } from "@/sanity/lib/types";
@@ -11,7 +10,7 @@ export const revalidate = 120;
 
 async function getSkills(): Promise<Skill[]> {
   const skills = await sanityFetch<Skill[]>({ query: skillsQuery, revalidate });
-  return skills?.length ? skills : fallbackSkills;
+  return skills || [];
 }
 
 export default async function SkillsPage() {

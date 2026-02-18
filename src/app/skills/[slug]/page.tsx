@@ -3,8 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PortableContent } from "@/components/portable-content";
 import { sanityFetch } from "@/sanity/lib/client";
-import { hasRequiredEnv } from "@/sanity/lib/env";
-import { fallbackSkills } from "@/sanity/lib/fallbacks";
 import { urlForImage } from "@/sanity/lib/image";
 import { skillBySlugQuery, skillSlugsQuery } from "@/sanity/lib/queries";
 import type { Skill } from "@/sanity/lib/types";
@@ -23,32 +21,15 @@ export async function generateStaticParams() {
     revalidate
   });
 
-  if (slugs?.length) {
-    return slugs.map((item) => ({ slug: item.slug }));
-  }
-
-  return fallbackSkills
-    .map((item) => item.slug?.current)
-    .filter((slug): slug is string => Boolean(slug))
-    .map((slug) => ({ slug }));
+  return slugs?.map((item) => ({ slug: item.slug })) || [];
 }
 
 async function getSkill(slug: string): Promise<Skill | null> {
-  const skill = await sanityFetch<Skill>({
+  return sanityFetch<Skill>({
     query: skillBySlugQuery,
     params: { slug },
     revalidate
   });
-
-  if (skill) {
-    return skill;
-  }
-
-  if (!hasRequiredEnv) {
-    return fallbackSkills.find((item) => item.slug?.current === slug) || null;
-  }
-
-  return null;
 }
 
 export default async function SkillPage({ params }: PageProps) {
