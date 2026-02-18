@@ -91,14 +91,12 @@ export const projectType = defineType({
   preview: {
     select: {
       title: "title",
-      subtitle: "year",
       media: "featuredImage"
     },
     prepare(selection) {
-      const { title, subtitle, media } = selection;
+      const { title, media } = selection;
       return {
         title,
-        subtitle: subtitle ? String(subtitle) : "No year",
         media
       };
     }

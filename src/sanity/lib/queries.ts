@@ -118,7 +118,6 @@ export const pageBySlugQuery = `
           title,
           slug,
           shortSummary,
-          year,
           "featuredImage": coalesce(featuredImage, coverImage)
         }
       }

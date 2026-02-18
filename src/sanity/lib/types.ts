@@ -78,7 +78,6 @@ export type FeaturedProjectSummary = {
     current: string;
   };
   shortSummary?: string;
-  year?: number;
   featuredImage?: SanityImage;
 };
 

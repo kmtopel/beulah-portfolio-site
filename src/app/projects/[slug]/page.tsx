@@ -4,10 +4,10 @@ import { notFound } from "next/navigation";
 import { PortableContent } from "@/components/portable-content";
 import { sanityFetch } from "@/sanity/lib/client";
 import { hasRequiredEnv } from "@/sanity/lib/env";
-import { fallbackProjects } from "@/sanity/lib/fallbacks";
 import { urlForImage } from "@/sanity/lib/image";
 import { projectBySlugQuery, projectSlugsQuery } from "@/sanity/lib/queries";
 import type { Project } from "@/sanity/lib/types";
+import { ChevronLeft } from "lucide-react";
 
 export const revalidate = 60;
 
@@ -27,10 +27,7 @@ export async function generateStaticParams() {
     return slugs.map((item) => ({ slug: item.slug }));
   }
 
-  return fallbackProjects
-    .map((item) => item.slug?.current)
-    .filter((slug): slug is string => Boolean(slug))
-    .map((slug) => ({ slug }));
+  return [];
 }
 
 async function getProject(slug: string): Promise<Project | null> {
@@ -42,10 +39,6 @@ async function getProject(slug: string): Promise<Project | null> {
 
   if (project) {
     return project;
-  }
-
-  if (!hasRequiredEnv) {
-    return fallbackProjects.find((item) => item.slug?.current === slug) || null;
   }
 
   return null;
@@ -61,18 +54,15 @@ export default async function ProjectPage({ params }: PageProps) {
   const coverUrl = project.featuredImage ? urlForImage(project.featuredImage).width(1400).height(1000).url() : null;
 
   return (
-    <article className="grid gap-5">
-      <Link href="/" className="w-fit text-[#17453a] transition-opacity hover:opacity-70">
-        Back to all work
+    <article className="gap-5 grid">
+      <Link href="/projects" className="flex items-center hover:opacity-70 w-fit text-[#17453a] transition-opacity">
+        <ChevronLeft className="size-4" />
+        <span>All Projects</span>
       </Link>
       <header>
-        <h1 className="type-display m-0 text-[clamp(2.4rem,6vw,4.2rem)] leading-[0.9]">
+        <h1 className="m-0 text-[clamp(2.4rem,6vw,4.2rem)] leading-[0.9] type-display">
           {project.title}
         </h1>
-        <p className="mt-3 text-sm text-[#5e564a]">
-          {project.year ? `${project.year}` : "Year TBD"}
-          {project.tags?.length ? ` · ${project.tags.join(" / ")}` : ""}
-        </p>
       </header>
 
       {coverUrl ? (
@@ -81,11 +71,11 @@ export default async function ProjectPage({ params }: PageProps) {
           alt={project.featuredImage?.alt || project.title}
           width={1400}
           height={1000}
-          className="w-full rounded-[14px] border border-[#e7dfd2]"
+          className="border border-[#e7dfd2] rounded-[14px] w-full"
         />
       ) : null}
 
-      <div className="max-w-none leading-relaxed [&_p]:mb-4 [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-6">
+      <div className="[&_p]:mb-4 [&_ul]:mb-4 [&_ul]:pl-6 max-w-none leading-relaxed [&_ul]:list-disc">
         <PortableContent value={project.description} />
       </div>
 
