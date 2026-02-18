@@ -1,8 +1,8 @@
 import { defineField, defineType } from "sanity";
 
 export const splitContentType = defineType({
-  name: "splitContent",
-  title: "Split content",
+  name: "splitContentBlock",
+  title: "Split content block",
   type: "object",
   fields: [
     defineField({
@@ -30,6 +30,11 @@ export const splitContentType = defineType({
       title: "Content",
       type: "array",
       of: [{ type: "block" }]
+    }),
+    defineField({
+      name: "imageOnRight",
+      title: "Image on right",
+      type: "boolean"
     })
   ],
     preview: {

@@ -17,12 +17,12 @@ export default async function ProjectsPage() {
   const projects = await getProjects();
 
   return (
-    <section className="grid gap-6">
-      <h1 className="type-display m-0 text-[clamp(2.2rem,5vw,3.3rem)] leading-[0.92]">
+    <section className="gap-6 grid">
+      <h1 className="m-0 text-[clamp(2.2rem,5vw,3.3rem)] leading-[0.92] type-display">
         Projects
       </h1>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
+      <div className="gap-4 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
         {projects.map((project) => {
           const imageUrl = project.featuredImage ? urlForImage(project.featuredImage).width(800).height(600).url() : null;
 
@@ -30,7 +30,7 @@ export default async function ProjectsPage() {
             <Link
               key={project._id}
               href={project.slug?.current ? `/projects/${project.slug.current}` : "#"}
-              className="grid overflow-hidden rounded-[14px] border border-[var(--vanilla-custard)] bg-white [grid-template-rows:180px_auto]"
+              className="grid bg-white border border-[var(--vanilla-custard)] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto]"
             >
               {imageUrl ? (
                 <Image
@@ -38,16 +38,13 @@ export default async function ProjectsPage() {
                   alt={project.featuredImage?.alt || project.title}
                   width={800}
                   height={600}
-                  className="h-full w-full object-cover"
+                  className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="h-full w-full bg-[linear-gradient(120deg,var(--tea-green),var(--tertiary))]" />
+                <div className="bg-[linear-gradient(120deg,var(--tea-green),var(--tertiary))] w-full h-full" />
               )}
-              <div className="grid gap-1 p-4">
-                <h2 className="m-0 text-[1.05rem]">{project.title}</h2>
-                <p className="m-0 text-sm text-[var(--reddish-brown)]">
-                  {project.year ? String(project.year) : "Year TBD"}
-                </p>
+              <div className="gap-1 grid p-4">
+                <h2 className="text-3xl">{project.title}</h2>
               </div>
             </Link>
           );

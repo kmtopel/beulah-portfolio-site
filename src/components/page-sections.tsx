@@ -1,5 +1,6 @@
 import FeaturedProjects from "@/components/featured-projects";
 import Hero from "@/components/hero";
+import SplitContent from "@/components/split-content";
 import type { PageSection } from "@/sanity/lib/types";
 
 type PageSectionsProps = {
@@ -8,7 +9,7 @@ type PageSectionsProps = {
 
 export default function PageSections({ sections }: PageSectionsProps) {
   return (
-    <div className="grid">
+    <div className="gap-8 md:gap-10 lg:gap-14 grid">
       {sections.map((section, index) => {
         if (section._type === "heroBlock") {
           return <Hero key={section._key} heroData={section} />;
@@ -16,6 +17,10 @@ export default function PageSections({ sections }: PageSectionsProps) {
 
         if (section._type === "featuredProjectsBlock") {
           return <FeaturedProjects key={section._key} projects={section.projects || []} />;
+        }
+
+        if (section._type === "splitContentBlock" || section._type === "splitContent") {
+          return <SplitContent key={section._key} block={section} />;
         }
 
         return (

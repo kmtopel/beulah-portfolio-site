@@ -1,19 +1,20 @@
-// create a view for the split content type schema block
 import Image from "next/image";
+import { PortableContent } from "@/components/portable-content";
 import { urlForImage } from "../sanity/lib/image";
-import { SplitContentType } from "../types/sanity";
-
+import type { LegacySplitContentBlock, SplitContentBlock } from "@/sanity/lib/types";
 interface SplitContentProps {
-  block: SplitContentType;
+  block: SplitContentBlock | LegacySplitContentBlock;
 }
 
 export default function SplitContent({ block }: SplitContentProps) {
-  const { image, heading, content } = block;
+  const { image, heading, content, imageOnRight } = block;
   const imageUrl = image ? urlForImage(image).width(800).url() : null;
+  const imageWrapperClasses = imageOnRight ? "lg:order-2" : "lg:order-1";
+  const contentWrapperClasses = imageOnRight ? "lg:order-1" : "lg:order-2";
 
   return (
-    <section className="items-center gap-12 lg:gap-20 grid lg:grid-cols-2 mt-20 lg:mt-28 mb-20 lg:mb-24">
-      <div className="relative rounded-lg w-full aspect-square overflow-hidden">
+    <section className="items-center gap-12 lg:gap-20 grid lg:grid-cols-2">
+      <div className={`relative rounded-lg w-full aspect-square overflow-hidden ${imageWrapperClasses}`}>
         <div className="relative shadow-[0_24px_50px_rgba(0,0,0,0.18)] border-[10px] border-white rounded-lg size-full overflow-hidden">
           {imageUrl ? (
             <Image
@@ -27,19 +28,13 @@ export default function SplitContent({ block }: SplitContentProps) {
           )}
         </div>
       </div>
-      <div>
+      <div className={contentWrapperClasses}>
         {heading ? (
           <h2 className="mb-4 font-bold text-3xl type-display">{heading}</h2>
         ) : null}
         {content ? (
           <div className="max-w-none prose prose-lg">
-            {/* @ts-expect-error */}
-            {content.map((block, index) => (
-                <div key={index}>   
-                    {/* @ts-expect-error */}
-                    <PortableText value={block} />
-                </div>
-            ))}
+            <PortableContent value={content} />
           </div>
         ) : null}
       </div>

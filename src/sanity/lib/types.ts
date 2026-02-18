@@ -88,7 +88,24 @@ export type FeaturedProjectsBlock = {
   projects?: FeaturedProjectSummary[];
 };
 
-export type PageSection = HeroBlock | FeaturedProjectsBlock;
+export type SplitContentBlock = {
+  _type: "splitContentBlock";
+  _key: string;
+  image?: SanityImage;
+  heading?: string;
+  content?: unknown[];
+  imageOnRight?: boolean;
+};
+
+export type LegacySplitContentBlock = Omit<SplitContentBlock, "_type"> & {
+  _type: "splitContent";
+};
+
+export type PageSection =
+  | HeroBlock
+  | FeaturedProjectsBlock
+  | SplitContentBlock
+  | LegacySplitContentBlock;
 
 export type Page = {
   _id: string;

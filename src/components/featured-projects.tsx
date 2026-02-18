@@ -14,7 +14,7 @@ export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
   }
 
   return (
-    <section className="mt-20 lg:mt-28 mb-20 lg:mb-24">
+    <section className="">
       <h2 className="mb-5 font-bold text-3xl type-display">Featured Projects</h2>
       <div className="gap-8 grid md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
