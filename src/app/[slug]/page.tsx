@@ -6,6 +6,7 @@ import type { Page } from "@/sanity/lib/types";
 
 export const revalidate = 120;
 export const dynamicParams = false;
+export const dynamic = "force-static";
 
 const reservedSlugs = new Set(["home", "projects", "skills"]);
 
