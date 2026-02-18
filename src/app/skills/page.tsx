@@ -45,7 +45,7 @@ export default async function SkillsPage() {
             <Link
               key={skill._id}
               href={skill.slug?.current ? `/skills/${skill.slug.current}` : "#"}
-              className="grid bg-[#fffdf7] border border-[#e7dfd2] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto]"
+              className="grid bg-white border border-[#e7dfd2] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto]"
             >
               {imageUrl ? (
                 <Image

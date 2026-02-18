@@ -89,7 +89,7 @@ export default async function SkillPage({ params }: PageProps) {
       </div>
 
       {skill.relatedProjects?.length ? (
-        <section className="bg-[#fffdf7] p-4 border border-[#e7dfd2] rounded-[14px]">
+        <section className="bg-white p-4 border border-[#e7dfd2] rounded-[14px]">
           <h2 className="m-0 text-lg">Related Projects</h2>
           <ul className="mt-3 mb-0 pl-6 list-disc">
             {skill.relatedProjects.map((project) => (

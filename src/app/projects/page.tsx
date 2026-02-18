@@ -30,7 +30,7 @@ export default async function ProjectsPage() {
             <Link
               key={project._id}
               href={project.slug?.current ? `/projects/${project.slug.current}` : "#"}
-              className="grid overflow-hidden rounded-[14px] border border-[var(--vanilla-custard)] bg-[var(--tertiary)] [grid-template-rows:180px_auto]"
+              className="grid overflow-hidden rounded-[14px] border border-[var(--vanilla-custard)] bg-white [grid-template-rows:180px_auto]"
             >
               {imageUrl ? (
                 <Image

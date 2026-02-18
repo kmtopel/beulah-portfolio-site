@@ -20,13 +20,13 @@ export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
           <Link
             key={project._id}
             href={project.slug?.current ? `/projects/${project.slug.current}` : "#"}
-            className="group block shadow-lg hover:shadow-xl border border-[var(--vanilla-custard)] rounded-lg overflow-hidden transition-shadow"
+            className="group block bg-white shadow-lg hover:shadow-xl border border-[var(--vanilla-custard)] rounded-lg overflow-hidden transition-shadow"
           >
             <div className="relative h-48">
               {project.featuredImage ? (
                 <Image
                   src={urlForImage(project.featuredImage).width(800).height(600).url()}
-                  alt={project.title}
+                  alt={project.featuredImage?.alt || project.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform"
                 />
@@ -36,7 +36,9 @@ export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
             </div>
             <div className="p-4">
               <h3 className="mb-2 font-semibold text-xl">{project.title}</h3>
-              <p>{project.shortSummary}</p>
+              {project.shortSummary ? (
+                <p className="text-gray-700 text-sm">{project.shortSummary}</p>
+              ) : null}
             </div>
           </Link>
         ))}

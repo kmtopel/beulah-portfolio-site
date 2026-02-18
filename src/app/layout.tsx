@@ -39,12 +39,16 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${bodyFont.variable} ${displayFont.variable} ${accentFont.variable} bg-white text-[var(--dark-olive-green)] antialiased`}
+        className={`${bodyFont.variable} ${displayFont.variable} ${accentFont.variable} relative isolate overflow-x-clip bg-white text-[var(--dark-olive-green)] antialiased`}
       >
-        <Header
-          navLinks={navLinks}
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 z-0 bg-white [background:radial-gradient(130%_100%_at_10%_92%,rgba(203,223,189,0.74)_0%,rgba(203,223,189,0.52)_35%,rgba(203,223,189,0.24)_60%,rgba(203,223,189,0.07)_78%,rgba(203,223,189,0)_90%),radial-gradient(105%_86%_at_28%_82%,rgba(203,223,189,0.18)_0%,rgba(203,223,189,0.08)_42%,rgba(203,223,189,0)_72%),#fff] md:[background:radial-gradient(120%_95%_at_12%_88%,rgba(203,223,189,0.78)_0%,rgba(203,223,189,0.56)_32%,rgba(203,223,189,0.26)_57%,rgba(203,223,189,0.08)_74%,rgba(203,223,189,0)_86%),radial-gradient(90%_78%_at_30%_80%,rgba(203,223,189,0.22)_0%,rgba(203,223,189,0.1)_40%,rgba(203,223,189,0)_72%),#fff]"
         />
-        <main className="mx-auto px-5 pt-8 pb-20 w-full max-w-[1020px]">{children}</main>
+        <div className="relative z-10">
+          <Header navLinks={navLinks} />
+          <main className="mx-auto px-5 pt-8 pb-20 w-full max-w-[1020px]">{children}</main>
+        </div>
       </body>
     </html>
   );

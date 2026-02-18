@@ -50,8 +50,7 @@ export const projectType = defineType({
     {
       name: "shortSummary",
       title: "Short summary",
-      type: "string",
-      validation: (rule) => rule.max(160).warning("Keep it under 160 characters for best display")
+      type: "string"
     },
     defineField({
       name: "description",

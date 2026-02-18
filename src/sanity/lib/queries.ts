@@ -117,6 +117,7 @@ export const pageBySlugQuery = `
           _id,
           title,
           slug,
+          shortSummary,
           year,
           "featuredImage": coalesce(featuredImage, coverImage)
         }

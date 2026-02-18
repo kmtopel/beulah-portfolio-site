@@ -77,6 +77,7 @@ export type FeaturedProjectSummary = {
   slug?: {
     current: string;
   };
+  shortSummary?: string;
   year?: number;
   featuredImage?: SanityImage;
 };
