@@ -9,6 +9,7 @@ export const dynamicParams = false;
 export const dynamic = "force-static";
 
 const reservedSlugs = new Set(["home", "projects", "skills"]);
+const placeholderPageSlug = "__no-pages__";
 
 type PageProps = {
   params: {
@@ -19,12 +20,13 @@ type PageProps = {
 export async function generateStaticParams() {
   const slugs = await sanityFetch<Array<{ slug: string }>>({ query: pageSlugsQuery, revalidate });
 
-  return (
+  const params =
     slugs
       ?.map((item) => item.slug)
       .filter((slug): slug is string => Boolean(slug) && !reservedSlugs.has(slug))
-      .map((slug) => ({ slug })) || []
-  );
+      .map((slug) => ({ slug })) || [];
+
+  return params.length ? params : [{ slug: placeholderPageSlug }];
 }
 
 async function getPage(slug: string): Promise<Page | null> {
@@ -37,6 +39,10 @@ async function getPage(slug: string): Promise<Page | null> {
 
 export default async function DynamicPage({ params }: PageProps) {
   if (reservedSlugs.has(params.slug)) {
+    notFound();
+  }
+
+  if (params.slug === placeholderPageSlug) {
     notFound();
   }
 

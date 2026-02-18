@@ -11,6 +11,7 @@ import { ChevronLeft } from "lucide-react";
 export const revalidate = 60;
 export const dynamicParams = false;
 export const dynamic = "force-static";
+const placeholderProjectSlug = "__no-projects__";
 
 type PageProps = {
   params: {
@@ -24,11 +25,13 @@ export async function generateStaticParams() {
     revalidate
   });
 
-  if (slugs?.length) {
-    return slugs.map((item) => ({ slug: item.slug }));
-  }
+  const params =
+    slugs
+      ?.map((item) => item.slug)
+      .filter((slug): slug is string => Boolean(slug))
+      .map((slug) => ({ slug })) || [];
 
-  return [];
+  return params.length ? params : [{ slug: placeholderProjectSlug }];
 }
 
 async function getProject(slug: string): Promise<Project | null> {
@@ -46,6 +49,10 @@ async function getProject(slug: string): Promise<Project | null> {
 }
 
 export default async function ProjectPage({ params }: PageProps) {
+  if (params.slug === placeholderProjectSlug) {
+    notFound();
+  }
+
   const project = await getProject(params.slug);
 
   if (!project) {

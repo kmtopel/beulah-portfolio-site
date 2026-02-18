@@ -4,8 +4,13 @@ import { notFound } from "next/navigation";
 import { PortableContent } from "@/components/portable-content";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/image";
-import { skillBySlugQuery } from "@/sanity/lib/queries";
+import { skillBySlugQuery, skillSlugsQuery } from "@/sanity/lib/queries";
 import type { Skill } from "@/sanity/lib/types";
+
+export const revalidate = 120;
+export const dynamicParams = false;
+export const dynamic = "force-static";
+const placeholderSkillSlug = "__no-skills__";
 
 type PageProps = {
   params: {
@@ -13,15 +18,34 @@ type PageProps = {
   };
 };
 
+export async function generateStaticParams() {
+  const slugs = await sanityFetch<Array<{ slug: string }>>({
+    query: skillSlugsQuery,
+    revalidate
+  });
+
+  const params =
+    slugs
+      ?.map((item) => item.slug)
+      .filter((slug): slug is string => Boolean(slug))
+      .map((slug) => ({ slug })) || [];
+
+  return params.length ? params : [{ slug: placeholderSkillSlug }];
+}
+
 async function getSkill(slug: string): Promise<Skill | null> {
   return sanityFetch<Skill>({
     query: skillBySlugQuery,
     params: { slug },
-    revalidate: 120
+    revalidate
   });
 }
 
 export default async function SkillPage({ params }: PageProps) {
+  if (params.slug === placeholderSkillSlug) {
+    notFound();
+  }
+
   const skill = await getSkill(params.slug);
 
   if (!skill) {
