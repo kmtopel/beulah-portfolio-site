@@ -19,7 +19,7 @@ export default function SplitContent({ block }: SplitContentProps) {
           {imageUrl ? (
             <Image
               src={imageUrl}
-              alt={image.alt || heading || "Split content image"}
+              alt={image?.alt || heading || "Split content image"}
               fill
               className="object-cover"
             />
