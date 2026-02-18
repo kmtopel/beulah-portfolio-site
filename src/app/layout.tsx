@@ -1,4 +1,4 @@
-import { Archivo_Narrow, Bodoni_Moda, Manrope } from "next/font/google";
+import { Archivo_Narrow, Cormorant_Garamond, Manrope } from "next/font/google";
 import Header from "@/components/header";
 import { sanityFetch } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
@@ -11,11 +11,11 @@ const bodyFont = Manrope({
   display: "swap"
 });
 
-const displayFont = Bodoni_Moda({
+const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
-  weight: ["500", "600", "700", "800"]
+  weight: ["400", "500", "600", "700"]
 });
 
 const accentFont = Archivo_Narrow({

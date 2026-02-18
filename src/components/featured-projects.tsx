@@ -43,6 +43,7 @@ export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
           </Link>
         ))}
       </div>
+      <a href="/projects" className="inline-block mt-4 text-center hover:underline">See all projects</a>
     </section>
   );
 }

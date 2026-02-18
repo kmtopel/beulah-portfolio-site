@@ -9,7 +9,7 @@ type PageSectionsProps = {
 export default function PageSections({ sections }: PageSectionsProps) {
   return (
     <div className="grid">
-      {sections.map((section) => {
+      {sections.map((section, index) => {
         if (section._type === "heroBlock") {
           return <Hero key={section._key} heroData={section} />;
         }
@@ -20,10 +20,10 @@ export default function PageSections({ sections }: PageSectionsProps) {
 
         return (
           <section
-            key={section._key}
+            key={`unsupported-section-${index}`}
             className="bg-[var(--tertiary)] p-4 border border-[var(--vanilla-custard)] rounded-[14px] text-sm"
           >
-            Unsupported section type: {section._type}
+            Unsupported section type.
           </section>
         );
       })}
