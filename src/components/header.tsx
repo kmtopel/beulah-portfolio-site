@@ -28,7 +28,7 @@ export default function Header({ navLinks }: HeaderProps) {
           aria-label="Home"
           className="inline-flex justify-center items-center hover:opacity-70 rounded-full size-10 no-underline transition-opacity"
         >
-          <Home className="size-5" strokeWidth={2.2} />
+          <Home className="size-6" strokeWidth={2} />
         </Link>
         <button
           type="button"

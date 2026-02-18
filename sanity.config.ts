@@ -1,11 +1,33 @@
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
-import { getSanityProjectConfig } from "./sanity.env";
 import { schemaTypes } from "./src/sanity/schemaTypes";
 import { singletonActions, singletonTypes, structure } from "./src/sanity/structure";
 
-const { projectId, dataset } = getSanityProjectConfig();
+type EnvMap = Record<string, string | undefined>;
+
+const importMetaEnv =
+  (typeof import.meta !== "undefined"
+    ? (import.meta as unknown as { env?: EnvMap }).env
+    : undefined) || {};
+const processEnv =
+  typeof process !== "undefined" && process.env
+    ? (process.env as EnvMap)
+    : {};
+
+const projectId =
+  importMetaEnv.SANITY_STUDIO_PROJECT_ID ||
+  processEnv.SANITY_STUDIO_PROJECT_ID ||
+  importMetaEnv.NEXT_PUBLIC_SANITY_PROJECT_ID ||
+  processEnv.NEXT_PUBLIC_SANITY_PROJECT_ID ||
+  "";
+
+const dataset =
+  importMetaEnv.SANITY_STUDIO_DATASET ||
+  processEnv.SANITY_STUDIO_DATASET ||
+  importMetaEnv.NEXT_PUBLIC_SANITY_DATASET ||
+  processEnv.NEXT_PUBLIC_SANITY_DATASET ||
+  "production";
 
 if (!projectId) {
   throw new Error(

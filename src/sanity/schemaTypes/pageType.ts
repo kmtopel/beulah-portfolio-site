@@ -24,7 +24,8 @@ export const pageType = defineType({
       type: "array",
       of: [
         defineArrayMember({ type: "heroBlock" }),
-        defineArrayMember({ type: "featuredProjectsBlock" })
+        defineArrayMember({ type: "featuredProjectsBlock" }),
+        defineArrayMember({ type: "splitContent" })
       ]
     })
   ],

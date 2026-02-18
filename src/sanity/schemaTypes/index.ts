@@ -5,6 +5,7 @@ import { pageType } from "./pageType";
 import { projectType } from "./projectType";
 import { siteSettingsType } from "./siteSettingsType";
 import { skillType } from "./skillType";
+import { splitContentType } from "./splitContentType";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   featuredProjectsType,
@@ -12,5 +13,6 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   pageType,
   projectType,
   skillType,
-  siteSettingsType
+  siteSettingsType,
+  splitContentType
 ];

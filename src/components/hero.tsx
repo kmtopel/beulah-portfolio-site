@@ -54,7 +54,7 @@ export default function Hero({ heroData }: HeroProps) {
 
       <div className="hidden lg:block relative">
         <div className="relative grid grid-cols-[67fr_33fr]">
-          <div className="content-center gap-4 grid bg-[var(--dark-olive-green)] px-16 py-14">
+          <div className="content-center gap-4 grid bg-[var(--dark-olive-green)] px-16 py-14 rounded-xs">
             {title ? (
               <h1 className="m-0 text-[clamp(2.4rem,6vw,4.8rem)] text-white text-left leading-[0.88] type-display">
                 {title}
