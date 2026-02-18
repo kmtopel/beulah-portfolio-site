@@ -35,7 +35,7 @@ export default function Header({ navLinks }: HeaderProps) {
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
           onClick={() => setIsOpen((current) => !current)}
-          className="md:hidden inline-flex justify-center items-center ml-auto border border-[var(--dark-olive-green)] rounded-full size-10"
+          className="md:hidden inline-flex justify-center items-center ml-auto rounded-full size-10"
         >
           {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>

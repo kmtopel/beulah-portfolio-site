@@ -45,10 +45,10 @@ export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
         ))}
       </div>
       <div className="mt-4 w-full text-center">
-        <a href="/projects" className="group inline-block mt-4 text-xl hover:underline">
+        <Link href="/projects" className="group inline-block mt-4 text-xl hover:underline">
           <span>See all projects</span>
           <ArrowRight className="inline-block ml-0.5 transition-transform group-hover:translate-x-1" size={16} />
-        </a>
+        </Link>
       </div>
     </section>
   );
