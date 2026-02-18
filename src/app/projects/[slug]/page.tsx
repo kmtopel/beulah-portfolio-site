@@ -9,6 +9,7 @@ import type { Project } from "@/sanity/lib/types";
 import { ChevronLeft } from "lucide-react";
 
 export const revalidate = 60;
+export const dynamicParams = false;
 
 type PageProps = {
   params: {

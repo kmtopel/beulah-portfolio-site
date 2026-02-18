@@ -8,6 +8,7 @@ import { skillBySlugQuery, skillSlugsQuery } from "@/sanity/lib/queries";
 import type { Skill } from "@/sanity/lib/types";
 
 export const revalidate = 120;
+export const dynamicParams = false;
 
 type PageProps = {
   params: {
