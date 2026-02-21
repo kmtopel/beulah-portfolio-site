@@ -1,19 +1,33 @@
-import Image from "next/image";
-import Link from "next/link";
+import { Suspense } from "react";
 import { sanityFetch } from "@/sanity/lib/client";
-import { urlForImage } from "@/sanity/lib/image";
-import { projectsQuery } from "@/sanity/lib/queries";
-import type { Project } from "@/sanity/lib/types";
+import { projectsQuery, projectFiltersQuery } from "@/sanity/lib/queries";
+import type { Project, ProjectCategory, SkillSummary, Client } from "@/sanity/lib/types";
+import ProjectGrid from "@/components/project-grid";
 
 export const revalidate = 60;
+
+type FilterData = {
+  categories: ProjectCategory[];
+  skills: SkillSummary[];
+  clients: Client[];
+};
 
 async function getProjects(): Promise<Project[]> {
   const projects = await sanityFetch<Project[]>({ query: projectsQuery, revalidate });
   return projects || [];
 }
 
+async function getFilters(): Promise<FilterData> {
+  const filters = await sanityFetch<FilterData>({ query: projectFiltersQuery, revalidate });
+  return {
+    categories: filters?.categories || [],
+    skills: filters?.skills || [],
+    clients: filters?.clients || []
+  };
+}
+
 export default async function ProjectsPage() {
-  const projects = await getProjects();
+  const [projects, filters] = await Promise.all([getProjects(), getFilters()]);
 
   return (
     <section className="gap-6 grid">
@@ -21,34 +35,14 @@ export default async function ProjectsPage() {
         Projects
       </h1>
 
-      <div className="gap-4 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
-        {projects.map((project) => {
-          const imageUrl = project.featuredImage ? urlForImage(project.featuredImage).width(800).height(600).url() : null;
-
-          return (
-            <Link
-              key={project._id}
-              href={project.slug?.current ? `/projects/${project.slug.current}` : "#"}
-              className="grid bg-white border border-[var(--vanilla-custard)] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto]"
-            >
-              {imageUrl ? (
-                <Image
-                  src={imageUrl}
-                  alt={project.featuredImage?.alt || project.title}
-                  width={800}
-                  height={600}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="bg-[linear-gradient(120deg,var(--tea-green),var(--tertiary))] w-full h-full" />
-              )}
-              <div className="gap-1 grid p-4">
-                <h2 className="text-3xl">{project.title}</h2>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+      <Suspense>
+        <ProjectGrid
+          projects={projects}
+          categories={filters.categories}
+          skills={filters.skills}
+          clients={filters.clients}
+        />
+      </Suspense>
     </section>
   );
 }

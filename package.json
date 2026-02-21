@@ -20,7 +20,8 @@
     "react-dom": "^18.3.1",
     "react-is": "^18.3.1",
     "sanity": "^3.95.0",
-    "styled-components": "^6.3.9"
+    "styled-components": "^6.3.9",
+    "swiper": "^12.1.2"
   },
   "devDependencies": {
     "@types/node": "^20.17.0",

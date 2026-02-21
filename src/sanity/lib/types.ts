@@ -7,6 +7,33 @@ export type SanityImage = {
   };
 };
 
+export type Client = {
+  _id: string;
+  title: string;
+  slug?: {
+    current: string;
+  };
+  logo?: SanityImage;
+  website?: string;
+  description?: string;
+};
+
+export type ProjectCategory = {
+  _id: string;
+  title: string;
+  slug?: {
+    current: string;
+  };
+};
+
+export type SkillSummary = {
+  _id: string;
+  title: string;
+  slug?: {
+    current: string;
+  };
+};
+
 export type Project = {
   _id: string;
   title: string;
@@ -14,6 +41,9 @@ export type Project = {
     current: string;
   };
   year?: number;
+  category?: ProjectCategory;
+  client?: Client;
+  skills?: SkillSummary[];
   description?: unknown[];
   featuredImage?: SanityImage;
   gallery?: SanityImage[];
@@ -100,8 +130,16 @@ export type LegacySplitContentBlock = Omit<SplitContentBlock, "_type"> & {
   _type: "splitContent";
 };
 
+export type ClientSliderBlock = {
+  _type: "clientSliderBlock";
+  _key: string;
+  heading?: string;
+  clients?: Client[];
+};
+
 export type PageSection =
   | HeroBlock
+  | ClientSliderBlock
   | FeaturedProjectsBlock
   | SplitContentBlock
   | LegacySplitContentBlock;

@@ -37,6 +37,18 @@ export const projectType = defineType({
       ]
     }),
     defineField({
+      name: "category",
+      title: "Category",
+      type: "reference",
+      to: [{ type: "projectCategory" }]
+    }),
+    defineField({
+      name: "client",
+      title: "Client",
+      type: "reference",
+      to: [{ type: "client" }]
+    }),
+    defineField({
       name: "skills",
       title: "Skills",
       type: "array",

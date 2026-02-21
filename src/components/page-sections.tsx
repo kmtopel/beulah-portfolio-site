@@ -1,3 +1,4 @@
+import ClientSlider from "@/components/client-slider";
 import FeaturedProjects from "@/components/featured-projects";
 import Hero from "@/components/hero";
 import SplitContent from "@/components/split-content";
@@ -13,6 +14,10 @@ export default function PageSections({ sections }: PageSectionsProps) {
       {sections.map((section, index) => {
         if (section._type === "heroBlock") {
           return <Hero key={section._key} heroData={section} />;
+        }
+
+        if (section._type === "clientSliderBlock") {
+          return <ClientSlider key={section._key} heading={section.heading} clients={section.clients || []} />;
         }
 
         if (section._type === "featuredProjectsBlock") {

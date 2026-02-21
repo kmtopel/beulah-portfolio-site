@@ -73,6 +73,19 @@ export default async function ProjectPage({ params }: PageProps) {
         </h1>
       </header>
 
+      {project.client ? (
+        <p className="text-sm text-[#17453a]/70">
+          Client:{" "}
+          {project.client.website ? (
+            <a href={project.client.website} target="_blank" rel="noreferrer" className="underline">
+              {project.client.title}
+            </a>
+          ) : (
+            <span>{project.client.title}</span>
+          )}
+        </p>
+      ) : null}
+
       {coverUrl ? (
         <Image
           src={coverUrl}

@@ -4,6 +4,9 @@ export const projectsQuery = `
     title,
     slug,
     year,
+    category->{_id, title, slug},
+    client->{_id, title, slug, logo, website},
+    skills[]->{_id, title, slug},
     description,
     "featuredImage": coalesce(featuredImage, coverImage),
     gallery,
@@ -18,6 +21,7 @@ export const projectBySlugQuery = `
     title,
     slug,
     year,
+    client->{_id, title, slug, logo, website},
     description,
     "featuredImage": coalesce(featuredImage, coverImage),
     gallery,
@@ -120,10 +124,28 @@ export const pageBySlugQuery = `
           shortSummary,
           "featuredImage": coalesce(featuredImage, coverImage)
         }
+      },
+      _type == "clientSliderBlock" => {
+        _key,
+        _type,
+        heading,
+        "clients": *[_type == "client"] | order(title asc) {
+          _id,
+          title,
+          slug,
+          logo,
+          website
+        }
       }
     }
   }
 `;
+
+export const projectFiltersQuery = `{
+  "categories": *[_type == "projectCategory"] | order(title asc) { _id, title, slug },
+  "skills": *[_type == "skill"] | order(title asc) { _id, title, slug },
+  "clients": *[_type == "client"] | order(title asc) { _id, title, slug }
+}`;
 
 export const pageSlugsQuery = `
   *[_type == "page" && defined(slug.current)]{
