@@ -37,10 +37,18 @@ export const splitContentType = defineType({
       type: "boolean"
     })
   ],
-    preview: {
+  preview: {
     select: {
       title: "heading",
-      media: "image"
+      media: "image",
+      imageOnRight: "imageOnRight"
+    },
+    prepare({ title, media, imageOnRight }) {
+      return {
+        title: title || "Split Content",
+        subtitle: `Image on ${imageOnRight ? "right" : "left"}`,
+        media
+      };
     }
   }
 });

@@ -28,5 +28,19 @@ export const heroType = defineType({
         })
       ]
     })
-  ]
+  ],
+  preview: {
+    select: {
+      title: "title",
+      subtitle: "subtitle",
+      media: "mainImage"
+    },
+    prepare({ title, subtitle, media }) {
+      return {
+        title: title || "Hero",
+        subtitle: subtitle || "Hero block",
+        media
+      };
+    }
+  }
 });
