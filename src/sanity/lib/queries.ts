@@ -51,15 +51,9 @@ export const skillsQuery = `
     _id,
     title,
     slug,
-    category,
     summary,
     description,
-    coverImage,
-    relatedProjects[]->{
-      _id,
-      title,
-      slug
-    }
+    coverImage
   }
 `;
 
@@ -68,15 +62,18 @@ export const skillBySlugQuery = `
     _id,
     title,
     slug,
-    category,
     summary,
     description,
-    coverImage,
-    relatedProjects[]->{
-      _id,
-      title,
-      slug
-    }
+    coverImage
+  }
+`;
+
+export const projectsBySkillSlugQuery = `
+  *[_type == "project" && $skillSlug in skills[]->slug.current] | order(_createdAt desc) [0...3] {
+    _id,
+    title,
+    slug,
+    "featuredImage": coalesce(featuredImage, coverImage)
   }
 `;
 

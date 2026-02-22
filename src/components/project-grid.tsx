@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useCallback, useMemo } from "react";
+import { X } from "lucide-react";
 import { urlForImage } from "@/sanity/lib/image";
 import type { Project, ProjectCategory, SkillSummary, Client } from "@/sanity/lib/types";
 
@@ -108,21 +109,38 @@ export default function ProjectGrid({ projects, categories, skills, clients }: P
   return (
     <>
       <div className="flex flex-col gap-3">
-        <FilterGroup label="Category" paramKey="category" options={categories} activeSlug={activeCategory} onToggle={handleToggle} />
-        <FilterGroup label="Skill" paramKey="skill" options={skills} activeSlug={activeSkill} onToggle={handleToggle} />
-        <FilterGroup label="Client" paramKey="client" options={clients} activeSlug={activeClient} onToggle={handleToggle} />
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+          <div className="flex flex-col gap-3">
+            <FilterGroup label="Category" paramKey="category" options={categories} activeSlug={activeCategory} onToggle={handleToggle} />
+            <FilterGroup label="Skill" paramKey="skill" options={skills} activeSlug={activeSkill} onToggle={handleToggle} />
+            <FilterGroup label="Client" paramKey="client" options={clients} activeSlug={activeClient} onToggle={handleToggle} />
+          </div>
 
-        {hasFilters ? (
-          <button
-            onClick={clearAll}
-            className="text-sm text-[#17453a] underline w-fit hover:opacity-70 transition-opacity"
-          >
-            Clear filters
-          </button>
-        ) : null}
+          {hasFilters ? (
+            <button
+              onClick={clearAll}
+              className="inline-flex items-center gap-1.5 text-sm text-[#17453a] hover:opacity-70 transition-opacity w-fit md:shrink-0"
+            >
+              <X size={14} />
+              Clear filters
+            </button>
+          ) : null}
+        </div>
+
+        {activeSkill ? (() => {
+          const activeSkillTitle = skills.find((s) => s.slug?.current === activeSkill)?.title;
+          return activeSkillTitle ? (
+            <Link
+              href={`/skills/${activeSkill}`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-base font-medium text-white bg-[#17453a] rounded-full hover:opacity-90 transition-opacity w-fit"
+            >
+              Read more about my experience with {activeSkillTitle} &rarr;
+            </Link>
+          ) : null;
+        })() : null}
       </div>
 
-      <div className="gap-4 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
+      <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {filtered.length > 0 ? (
           filtered.map((project) => {
             const imageUrl = project.featuredImage

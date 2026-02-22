@@ -65,17 +65,9 @@ export type Skill = {
   slug?: {
     current: string;
   };
-  category?: string;
   summary?: string;
   description?: unknown[];
   coverImage?: SanityImage;
-  relatedProjects?: Array<{
-    _id: string;
-    title: string;
-    slug?: {
-      current: string;
-    };
-  }>;
 };
 
 export type SiteSettings = {

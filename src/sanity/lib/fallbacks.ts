@@ -41,14 +41,12 @@ export const fallbackSkills: Skill[] = [
     _id: "fallback-skill-1",
     title: "Creative Direction",
     slug: { current: "creative-direction" },
-    category: "Direction",
     summary: "Leading visual storytelling, concepting, and campaign direction."
   },
   {
     _id: "fallback-skill-2",
     title: "Editorial Design",
     slug: { current: "editorial-design" },
-    category: "Design",
     summary: "Designing layouts and systems for print and digital editorial work."
   }
 ];

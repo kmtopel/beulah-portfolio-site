@@ -12,9 +12,14 @@ export const skillType = defineType({
       validation: (rule) => rule.required()
     }),
     defineField({
-      name: "category",
-      title: "Category",
-      type: "string"
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "title",
+        maxLength: 96
+      },
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: "summary",
@@ -43,22 +48,11 @@ export const skillType = defineType({
         })
       ]
     }),
-    defineField({
-      name: "relatedProjects",
-      title: "Related projects",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "reference",
-          to: [{ type: "project" }]
-        })
-      ]
-    })
   ],
   preview: {
     select: {
       title: "title",
-      subtitle: "category",
+      subtitle: "summary",
       media: "coverImage"
     },
     prepare(selection) {

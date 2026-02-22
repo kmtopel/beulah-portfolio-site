@@ -60,10 +60,9 @@ export default async function SkillsPage() {
 
               <div className="gap-2 grid p-4">
                 <h2 className="m-0 text-[1.05rem]">{skill.title}</h2>
-                <div className="text-[#5e564a] text-sm">
-                  {skill.category || "Skill"}
-                  {skill.summary ? ` · ${skill.summary}` : ""}
-                </div>
+                {skill.summary ? (
+                  <p className="text-[#5e564a] text-sm m-0">{skill.summary}</p>
+                ) : null}
               </div>
             </Link>
           );
