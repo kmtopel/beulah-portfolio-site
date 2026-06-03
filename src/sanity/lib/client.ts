@@ -17,7 +17,8 @@ type SanityFetchArgs = {
 
 export async function sanityFetch<T>({
   query,
-  params = {}
+  params = {},
+  revalidate = 60
 }: SanityFetchArgs): Promise<T | null> {
   if (!hasRequiredEnv) {
     return null;
@@ -25,7 +26,7 @@ export async function sanityFetch<T>({
 
   try {
     return await client.fetch<T>(query, params, {
-      cache: useCdn ? "force-cache" : "no-store"
+      next: { revalidate }
     });
   } catch (error) {
     console.warn("Sanity fetch failed.", error);
