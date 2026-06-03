@@ -10,5 +10,5 @@ const NextStudio = dynamic(
 import config from "../../../../sanity.config";
 
 export default function StudioPage() {
-  return <NextStudio config={config} basePath="/admin" />;
+  return <NextStudio config={config} basePath="/studio" />;
 }

@@ -3,7 +3,7 @@ export const metadata = {
   description: "Content management for Beulah Peters portfolio site"
 };
 
-export default function AdminLayout({
+export default function StudioLayout({
   children
 }: {
   children: React.ReactNode;
