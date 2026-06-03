@@ -5,6 +5,9 @@ const shouldExport = isGitHubActions || process.env.NEXT_OUTPUT_EXPORT === "true
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   ...(shouldExport ? { output: "export" } : {}),
+  compiler: {
+    styledComponents: true
+  },
   trailingSlash: true,
   images: {
     unoptimized: true,

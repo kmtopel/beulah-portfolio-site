@@ -4,34 +4,21 @@ import { structureTool } from "sanity/structure";
 import { schemaTypes } from "./src/sanity/schemaTypes";
 import { singletonActions, singletonTypes, structure } from "./src/sanity/structure";
 
-type EnvMap = Record<string, string | undefined>;
-
-const importMetaEnv =
-  (typeof import.meta !== "undefined"
-    ? (import.meta as unknown as { env?: EnvMap }).env
-    : undefined) || {};
-const processEnv =
-  typeof process !== "undefined" && process.env
-    ? (process.env as EnvMap)
-    : {};
-
+// Next.js inlines NEXT_PUBLIC_* env vars at compile time only when
+// referenced literally — dynamic property access won't be replaced.
 const projectId =
-  importMetaEnv.SANITY_STUDIO_PROJECT_ID ||
-  processEnv.SANITY_STUDIO_PROJECT_ID ||
-  importMetaEnv.NEXT_PUBLIC_SANITY_PROJECT_ID ||
-  processEnv.NEXT_PUBLIC_SANITY_PROJECT_ID ||
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ||
+  process.env.SANITY_STUDIO_PROJECT_ID ||
   "";
 
 const dataset =
-  importMetaEnv.SANITY_STUDIO_DATASET ||
-  processEnv.SANITY_STUDIO_DATASET ||
-  importMetaEnv.NEXT_PUBLIC_SANITY_DATASET ||
-  processEnv.NEXT_PUBLIC_SANITY_DATASET ||
+  process.env.NEXT_PUBLIC_SANITY_DATASET ||
+  process.env.SANITY_STUDIO_DATASET ||
   "production";
 
 if (!projectId) {
   throw new Error(
-    "Missing Sanity project id. Set SANITY_STUDIO_PROJECT_ID (preferred) or NEXT_PUBLIC_SANITY_PROJECT_ID."
+    "Missing Sanity project id. Set NEXT_PUBLIC_SANITY_PROJECT_ID or SANITY_STUDIO_PROJECT_ID."
   );
 }
 

@@ -1,57 +1,178 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, FreeMode } from "swiper/modules";
-import type { Swiper as SwiperType } from "swiper";
 import { urlForImage } from "@/sanity/lib/image";
 import type { Client } from "@/sanity/lib/types";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/free-mode";
 
 interface ClientSliderProps {
   heading?: string;
   clients: Client[];
 }
 
-export default function ClientSlider({ heading, clients }: ClientSliderProps) {
-  const [canGoPrev, setCanGoPrev] = useState(false);
-  const [canGoNext, setCanGoNext] = useState(false);
+const VIEWPORT_BUFFER = 1.5;
+const EASE_DURATION_MS = 600;
 
-  const updateNav = (swiper: SwiperType) => {
-    setCanGoPrev(!swiper.isBeginning);
-    setCanGoNext(!swiper.isEnd);
+/** Smoothly ramp the playbackRate of all animations on `el` toward `target` over `duration` ms. */
+function easePlaybackRate(el: HTMLElement, target: number, duration: number) {
+  const animations = el.getAnimations();
+  if (!animations.length) return;
+
+  const start = animations[0].playbackRate;
+  if (start === target) return;
+
+  const t0 = performance.now();
+
+  const tick = (now: number) => {
+    const elapsed = now - t0;
+    const progress = Math.min(elapsed / duration, 1);
+    // ease-in-out cubic
+    const eased =
+      progress < 0.5
+        ? 4 * progress * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    const rate = start + (target - start) * eased;
+
+    animations.forEach((a) => {
+      a.playbackRate = rate;
+    });
+
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    }
   };
+
+  requestAnimationFrame(tick);
+}
+
+export default function ClientSlider({ heading, clients }: ClientSliderProps) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const originalsRef = useRef<HTMLElement[]>([]);
+
+  const layout = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const originals = originalsRef.current;
+    if (!originals.length) return;
+
+    // Remove previous clones
+    track.querySelectorAll("[data-marquee-clone]").forEach((n) => n.remove());
+
+    // Reset animation to force reflow
+    track.style.animation = "none";
+    void track.offsetWidth;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reducedMotion) {
+      track.classList.remove("animate-marquee", "self-start", "w-max");
+      track.classList.add("flex-wrap", "justify-center", "gap-y-4");
+      track.style.removeProperty("--marquee-shift");
+      track.style.animation = "";
+      return;
+    }
+
+    track.classList.remove("flex-wrap", "justify-center", "gap-y-4");
+    track.classList.add("self-start", "w-max");
+
+    const singleSetWidth = originals.reduce(
+      (sum, el) => sum + el.getBoundingClientRect().width,
+      0
+    );
+    if (singleSetWidth === 0) return;
+
+    const desiredWidth = window.innerWidth * 2 * VIEWPORT_BUFFER;
+    const copies = Math.max(2, Math.ceil(desiredWidth / singleSetWidth));
+
+    const frag = document.createDocumentFragment();
+    for (let i = 1; i < copies; i++) {
+      originals.forEach((el) => {
+        const clone = el.cloneNode(true) as HTMLElement;
+        clone.setAttribute("aria-hidden", "true");
+        clone.dataset.marqueeClone = "true";
+        clone.querySelectorAll("img").forEach((img) => img.setAttribute("alt", ""));
+        frag.appendChild(clone);
+      });
+    }
+    track.appendChild(frag);
+
+    track.style.setProperty("--marquee-shift", `-${100 / copies}%`);
+    track.style.animation = "";
+    track.classList.add("animate-marquee");
+  }, []);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    // Capture the original children (before cloning)
+    originalsRef.current = Array.from(track.children) as HTMLElement[];
+
+    // Wait for images to load, then run layout
+    const imgs = Array.from(track.querySelectorAll("img"));
+    const pending = imgs.filter((img) => !img.complete);
+
+    if (pending.length) {
+      Promise.all(
+        pending.map(
+          (img) =>
+            new Promise<void>((resolve) => {
+              img.addEventListener("load", () => resolve(), { once: true });
+              img.addEventListener("error", () => resolve(), { once: true });
+            })
+        )
+      ).then(layout);
+    } else {
+      layout();
+    }
+
+    // Re-layout on resize (width changes only)
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    let lastWidth = window.innerWidth;
+    const onResize = () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(layout, 150);
+    };
+    window.addEventListener("resize", onResize);
+
+    // Re-layout on reduced motion preference change
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    mq.addEventListener("change", layout);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      mq.removeEventListener("change", layout);
+      clearTimeout(resizeTimer);
+    };
+  }, [layout]);
+
+  const handleMouseEnter = useCallback(() => {
+    const track = trackRef.current;
+    if (track) easePlaybackRate(track, 0, EASE_DURATION_MS);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const track = trackRef.current;
+    if (track) easePlaybackRate(track, 1, EASE_DURATION_MS);
+  }, []);
 
   if (!clients?.length) return null;
 
   return (
-    <section className="w-full">
+    <section
+      className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen flex flex-col items-center gap-8 overflow-hidden py-4"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {heading ? (
-        <h2 className="mb-5 font-bold text-3xl type-display">{heading}</h2>
+        <h2 className="font-bold text-3xl type-display">{heading}</h2>
       ) : null}
 
-      <Swiper
-        modules={[Navigation, FreeMode]}
-        navigation={{
-          nextEl: ".client-slider-next",
-          prevEl: ".client-slider-prev"
-        }}
-        freeMode
-        grabCursor
-        slidesPerView="auto"
-        spaceBetween={32}
-        touchEventsTarget="container"
-        className="client-slider w-full !overflow-visible"
-        onSwiper={updateNav}
-        onSlideChange={updateNav}
-        onReachBeginning={updateNav}
-        onReachEnd={updateNav}
-      >
+      <div ref={trackRef} className="flex items-center w-max self-start">
         {clients.map((client) => {
           if (!client?._id) return null;
           const slug = client.slug?.current;
@@ -59,10 +180,10 @@ export default function ClientSlider({ heading, clients }: ClientSliderProps) {
           const logo = client.logo?.asset ? client.logo : null;
 
           return (
-            <SwiperSlide key={client._id} className="!w-auto">
+            <div key={client._id} className="shrink-0 flex">
               <Link
                 href={slug ? `/projects?client=${slug}` : "/projects"}
-                className="flex items-center h-28"
+                className="group flex items-center justify-center px-10 md:px-16 py-4"
               >
                 {logo ? (
                   <Image
@@ -70,40 +191,18 @@ export default function ClientSlider({ heading, clients }: ClientSliderProps) {
                     alt={logo.alt || title}
                     width={300}
                     height={200}
-                    className="opacity-60 hover:opacity-100 brightness-0 w-auto h-24 object-contain transition-opacity"
+                    className="opacity-60 group-hover:opacity-100 brightness-0 w-auto h-16 md:h-20 object-contain transition-opacity"
                   />
                 ) : (
-                  <span className="flex items-center opacity-60 hover:opacity-100 px-4 h-24 font-medium text-[#333] hover:text-black text-sm transition-all">
+                  <span className="opacity-60 group-hover:opacity-100 font-medium text-sm transition-opacity whitespace-nowrap">
                     {title}
                   </span>
                 )}
               </Link>
-            </SwiperSlide>
+            </div>
           );
         })}
-      </Swiper>
-
-      {(canGoPrev || canGoNext) && (
-        <div className="flex justify-center items-center gap-3 mt-4">
-          <button disabled={!canGoPrev} className="flex justify-center items-center bg-white hover:bg-[#17453a]/5 disabled:opacity-30 border border-[var(--vanilla-custard)] rounded-full w-9 h-9 text-[#17453a] transition-colors disabled:cursor-default client-slider-prev">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
-          </button>
-          <button disabled={!canGoNext} className="flex justify-center items-center bg-white hover:bg-[#17453a]/5 disabled:opacity-30 border border-[var(--vanilla-custard)] rounded-full w-9 h-9 text-[#17453a] transition-colors disabled:cursor-default client-slider-next">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-          </button>
-        </div>
-      )}
-
-      <style jsx global>{`
-        .client-slider,
-        .client-slider .swiper-wrapper {
-          overflow: visible !important;
-        }
-        .client-slider .swiper-button-next,
-        .client-slider .swiper-button-prev {
-          display: none;
-        }
-      `}</style>
+      </div>
     </section>
   );
 }

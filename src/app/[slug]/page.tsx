@@ -8,7 +8,7 @@ export const revalidate = 120;
 export const dynamicParams = false;
 export const dynamic = "force-static";
 
-const reservedSlugs = new Set(["home", "projects", "skills"]);
+const reservedSlugs = new Set(["home", "projects", "skills", "admin"]);
 const placeholderPageSlug = "__no-pages__";
 
 type PageProps = {

@@ -58,6 +58,14 @@ a {
   text-decoration: none;
 }
 
+@keyframes marquee {
+  to { transform: translateX(var(--marquee-shift, -50%)); }
+}
+
+.animate-marquee {
+  animation: marquee var(--marquee-duration, 50s) linear infinite;
+}
+
 .container {
   max-width: 1200px;
   margin-left: auto;
