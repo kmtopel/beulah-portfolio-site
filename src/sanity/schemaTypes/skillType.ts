@@ -22,6 +22,13 @@ export const skillType = defineType({
       validation: (rule) => rule.required()
     }),
     defineField({
+      name: "hasDetailPage",
+      title: "Enable detail page",
+      description: "When checked, this skill will have its own page with full description and related projects.",
+      type: "boolean",
+      initialValue: false
+    }),
+    defineField({
       name: "summary",
       title: "Summary",
       type: "text",
@@ -31,7 +38,8 @@ export const skillType = defineType({
       name: "description",
       title: "Description",
       type: "array",
-      of: [defineArrayMember({ type: "block" })]
+      of: [defineArrayMember({ type: "block" })],
+      hidden: ({ document }) => !document?.hasDetailPage
     }),
     defineField({
       name: "coverImage",
@@ -46,7 +54,8 @@ export const skillType = defineType({
           title: "Alt text",
           type: "string"
         })
-      ]
+      ],
+      hidden: ({ document }) => !document?.hasDetailPage
     }),
   ],
   preview: {

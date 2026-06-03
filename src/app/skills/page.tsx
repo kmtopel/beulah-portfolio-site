@@ -39,13 +39,10 @@ export default async function SkillsPage() {
       <div className="gap-4 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
         {skills.map((skill) => {
           const imageUrl = skill.coverImage ? urlForImage(skill.coverImage).width(800).height(600).url() : null;
+          const hasLink = skill.hasDetailPage && skill.slug?.current;
 
-          return (
-            <Link
-              key={skill._id}
-              href={skill.slug?.current ? `/skills/${skill.slug.current}` : "#"}
-              className="grid bg-white border border-[#e7dfd2] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto]"
-            >
+          const card = (
+            <>
               {imageUrl ? (
                 <Image
                   src={imageUrl}
@@ -57,14 +54,30 @@ export default async function SkillsPage() {
               ) : (
                 <div className="bg-[linear-gradient(120deg,#d9ece7,#f6f0df)] size-full" />
               )}
-
               <div className="gap-2 grid p-4">
                 <h2 className="m-0 text-[1.05rem]">{skill.title}</h2>
                 {skill.summary ? (
                   <p className="text-[#5e564a] text-sm m-0">{skill.summary}</p>
                 ) : null}
               </div>
+            </>
+          );
+
+          return hasLink ? (
+            <Link
+              key={skill._id}
+              href={`/skills/${skill.slug!.current}`}
+              className="grid bg-white border border-[#e7dfd2] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto]"
+            >
+              {card}
             </Link>
+          ) : (
+            <div
+              key={skill._id}
+              className="grid bg-white border border-[#e7dfd2] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto]"
+            >
+              {card}
+            </div>
           );
         })}
       </div>

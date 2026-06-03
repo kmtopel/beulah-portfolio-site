@@ -65,6 +65,7 @@ export type Skill = {
   slug?: {
     current: string;
   };
+  hasDetailPage?: boolean;
   summary?: string;
   description?: unknown[];
   coverImage?: SanityImage;

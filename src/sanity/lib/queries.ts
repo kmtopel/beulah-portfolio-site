@@ -51,6 +51,7 @@ export const skillsQuery = `
     _id,
     title,
     slug,
+    hasDetailPage,
     summary,
     description,
     coverImage
@@ -78,7 +79,7 @@ export const projectsBySkillSlugQuery = `
 `;
 
 export const skillSlugsQuery = `
-  *[_type == "skill" && defined(slug.current)]{
+  *[_type == "skill" && defined(slug.current) && hasDetailPage == true]{
     "slug": slug.current
   }
 `;
