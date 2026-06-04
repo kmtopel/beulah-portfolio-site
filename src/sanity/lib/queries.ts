@@ -134,6 +134,11 @@ export const pageBySlugQuery = `
           logo,
           website
         }
+      },
+      _type == "richTextBlock" => {
+        _key,
+        _type,
+        content
       }
     }
   }

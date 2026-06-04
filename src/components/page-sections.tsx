@@ -1,6 +1,7 @@
 import ClientSlider from "@/components/client-slider";
 import FeaturedProjects from "@/components/featured-projects";
 import Hero from "@/components/hero";
+import { PortableContent } from "@/components/portable-content";
 import SplitContent from "@/components/split-content";
 import type { PageSection } from "@/sanity/lib/types";
 
@@ -22,6 +23,14 @@ export default function PageSections({ sections }: PageSectionsProps) {
 
         if (section._type === "featuredProjectsBlock") {
           return <FeaturedProjects key={section._key} projects={section.projects || []} />;
+        }
+
+        if (section._type === "richTextBlock") {
+          return (
+            <section key={section._key} className="max-w-none prose prose-lg">
+              <PortableContent value={section.content} />
+            </section>
+          );
         }
 
         if (section._type === "splitContentBlock" || section._type === "splitContent") {

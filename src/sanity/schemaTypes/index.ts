@@ -8,6 +8,7 @@ import { projectCategoryType } from "./projectCategoryType";
 import { projectType } from "./projectType";
 import { siteSettingsType } from "./siteSettingsType";
 import { skillType } from "./skillType";
+import { richTextBlockType } from "./richTextBlockType";
 import { splitContentType } from "./splitContentType";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
@@ -18,6 +19,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   pageType,
   projectCategoryType,
   projectType,
+  richTextBlockType,
   skillType,
   siteSettingsType,
   splitContentType

@@ -131,10 +131,17 @@ export type ClientSliderBlock = {
   clients?: Client[];
 };
 
+export type RichTextBlock = {
+  _type: "richTextBlock";
+  _key: string;
+  content?: unknown[];
+};
+
 export type PageSection =
   | HeroBlock
   | ClientSliderBlock
   | FeaturedProjectsBlock
+  | RichTextBlock
   | SplitContentBlock
   | LegacySplitContentBlock;
 
