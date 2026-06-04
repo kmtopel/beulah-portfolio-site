@@ -49,7 +49,7 @@ export default async function RootLayout({
         <div className="relative z-10">
           <Header navLinks={navLinks} />
           <main className="mx-auto px-5 pt-8 pb-20 w-full max-w-[1020px]">{children}</main>
-          <Footer socialLinks={siteSettings?.socialLinks} />
+          <Footer socialLinks={siteSettings?.socialLinks} brandLabel={siteSettings?.headerBrandLabel} />
         </div>
       </body>
     </html>

@@ -64,9 +64,10 @@ const platformLabels: Record<string, string> = {
 
 interface FooterProps {
   socialLinks: SiteSettings["socialLinks"];
+  brandLabel?: string;
 }
 
-export default function Footer({ socialLinks }: FooterProps) {
+export default function Footer({ socialLinks, brandLabel }: FooterProps) {
   const links = socialLinks?.filter((link) => link.platform && link.url) ?? [];
 
   return (
@@ -100,7 +101,7 @@ export default function Footer({ socialLinks }: FooterProps) {
           })}
         </div>
       ) : null}
-      <p className="mt-4 text-center text-sm opacity-40">&copy; {new Date().getFullYear()} Beulah Peters</p>
+      <p className="mt-4 text-center text-sm opacity-40">&copy; {new Date().getFullYear()} {brandLabel || "Beulah Peters"}</p>
     </footer>
   );
 }
