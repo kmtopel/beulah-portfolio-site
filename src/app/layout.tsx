@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Archivo_Narrow, Cormorant_Garamond, Manrope } from "next/font/google";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
@@ -26,12 +27,30 @@ const accentFont = Archivo_Narrow({
   weight: ["500", "600", "700"]
 });
 
+async function getSiteSettings() {
+  return sanityFetch<SiteSettings>({ query: siteSettingsQuery, revalidate: 300 });
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const siteSettings = await getSiteSettings();
+
+  return {
+    title: {
+      default: siteSettings?.seoTitle || "Beulah Peters",
+      template: `%s | ${siteSettings?.seoTitle || "Beulah Peters"}`
+    },
+    description:
+      siteSettings?.seoDescription ||
+      "Beulah Peters — designer and eLearning developer crafting brand identities, content, and visual storytelling for creative companies."
+  };
+}
+
 export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const siteSettings = await sanityFetch<SiteSettings>({ query: siteSettingsQuery, revalidate: 300 });
+  const siteSettings = await getSiteSettings();
   const navLinks =
     siteSettings?.headerNavLinks?.flatMap((item) =>
       item?.label && item?.href ? [{ label: item.label, href: item.href }] : []
