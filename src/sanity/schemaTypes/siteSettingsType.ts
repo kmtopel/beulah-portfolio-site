@@ -66,22 +66,59 @@ export const siteSettingsType = defineType({
           type: "object",
           fields: [
             defineField({
-              name: "label",
-              title: "Label",
+              name: "platform",
+              title: "Platform",
               type: "string",
+              options: {
+                list: [
+                  { title: "Instagram", value: "instagram" },
+                  { title: "LinkedIn", value: "linkedin" },
+                  { title: "Facebook", value: "facebook" },
+                  { title: "Twitter / X", value: "twitter" },
+                  { title: "YouTube", value: "youtube" },
+                  { title: "GitHub", value: "github" },
+                  { title: "Dribbble", value: "dribbble" },
+                  { title: "Behance", value: "behance" },
+                  { title: "TikTok", value: "tiktok" },
+                  { title: "Twitch", value: "twitch" },
+                  { title: "Email", value: "email" },
+                  { title: "Website", value: "website" }
+                ]
+              },
               validation: (rule) => rule.required()
             }),
             defineField({
               name: "url",
               title: "URL",
               type: "url",
-              validation: (rule) => rule.required()
+              validation: (rule) =>
+                rule.required().uri({ allowRelative: false, scheme: ["http", "https", "mailto"] })
             })
           ],
           preview: {
             select: {
-              title: "label",
-              subtitle: "url"
+              platform: "platform",
+              url: "url"
+            },
+            prepare({ platform, url }) {
+              const labels: Record<string, string> = {
+                instagram: "Instagram",
+                linkedin: "LinkedIn",
+                facebook: "Facebook",
+                twitter: "Twitter / X",
+                youtube: "YouTube",
+                github: "GitHub",
+                dribbble: "Dribbble",
+                behance: "Behance",
+                tiktok: "TikTok",
+                twitch: "Twitch",
+                email: "Email",
+                website: "Website"
+              };
+              return {
+                title: labels[platform] || platform,
+                subtitle: url
+              };
             }
           }
         })

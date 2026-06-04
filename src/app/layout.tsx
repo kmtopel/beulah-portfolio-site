@@ -1,4 +1,5 @@
 import { Archivo_Narrow, Cormorant_Garamond, Manrope } from "next/font/google";
+import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { sanityFetch } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
@@ -48,6 +49,7 @@ export default async function RootLayout({
         <div className="relative z-10">
           <Header navLinks={navLinks} />
           <main className="mx-auto px-5 pt-8 pb-20 w-full max-w-[1020px]">{children}</main>
+          <Footer socialLinks={siteSettings?.socialLinks} />
         </div>
       </body>
     </html>

@@ -82,7 +82,7 @@ export type SiteSettings = {
   seoTitle?: string;
   seoDescription?: string;
   socialLinks?: Array<{
-    label?: string;
+    platform?: string;
     url?: string;
   }>;
 };
