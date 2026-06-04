@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { sanityFetch } from "@/sanity/lib/client";
+
+export const metadata: Metadata = {
+  title: "Skills",
+  description: "Core skills and capabilities — branding, content creation, product photography, and more.",
+  alternates: { canonical: "/skills" }
+};
 import { hasRequiredEnv } from "@/sanity/lib/env";
 import { urlForImage } from "@/sanity/lib/image";
 import { skillsQuery } from "@/sanity/lib/queries";

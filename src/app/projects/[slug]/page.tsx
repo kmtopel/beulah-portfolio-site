@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -19,6 +20,14 @@ type PageProps = {
   };
 };
 
+async function getProject(slug: string): Promise<Project | null> {
+  return sanityFetch<Project>({
+    query: projectBySlugQuery,
+    params: { slug },
+    revalidate
+  });
+}
+
 export async function generateStaticParams() {
   const slugs = await sanityFetch<Array<{ slug: string }>>({
     query: projectSlugsQuery,
@@ -34,18 +43,24 @@ export async function generateStaticParams() {
   return params.length ? params : [{ slug: placeholderProjectSlug }];
 }
 
-async function getProject(slug: string): Promise<Project | null> {
-  const project = await sanityFetch<Project>({
-    query: projectBySlugQuery,
-    params: { slug },
-    revalidate
-  });
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  if (params.slug === placeholderProjectSlug) return {};
+  const project = await getProject(params.slug);
+  if (!project) return {};
 
-  if (project) {
-    return project;
-  }
+  const ogImage = project.featuredImage
+    ? urlForImage(project.featuredImage).width(1200).height(630).url()
+    : undefined;
 
-  return null;
+  return {
+    title: project.title,
+    description: project.tags?.join(", ") || `${project.title} — a project by Beulah Peters`,
+    alternates: { canonical: `/projects/${params.slug}` },
+    openGraph: {
+      title: project.title,
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630 }] } : {})
+    }
+  };
 }
 
 export default async function ProjectPage({ params }: PageProps) {

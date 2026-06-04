@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Projects",
+  description: "Portfolio of design, branding, and content creation projects by Beulah Peters.",
+  alternates: { canonical: "/projects" }
+};
 import { sanityFetch } from "@/sanity/lib/client";
 import { projectsQuery, projectFiltersQuery } from "@/sanity/lib/queries";
 import type { Project, ProjectCategory, SkillSummary, Client } from "@/sanity/lib/types";

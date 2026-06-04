@@ -31,17 +31,38 @@ async function getSiteSettings() {
   return sanityFetch<SiteSettings>({ query: siteSettingsQuery, revalidate: 300 });
 }
 
+const SITE_URL = "https://beulahpeters.com";
+const FALLBACK_TITLE = "Beulah Peters";
+const FALLBACK_DESCRIPTION =
+  "Beulah Peters — designer and eLearning developer crafting brand identities, content, and visual storytelling for creative companies.";
+
 export async function generateMetadata(): Promise<Metadata> {
   const siteSettings = await getSiteSettings();
+  const title = siteSettings?.seoTitle || FALLBACK_TITLE;
+  const description = siteSettings?.seoDescription || FALLBACK_DESCRIPTION;
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: {
-      default: siteSettings?.seoTitle || "Beulah Peters",
-      template: `%s | ${siteSettings?.seoTitle || "Beulah Peters"}`
+      default: title,
+      template: `%s | ${title}`
     },
-    description:
-      siteSettings?.seoDescription ||
-      "Beulah Peters — designer and eLearning developer crafting brand identities, content, and visual storytelling for creative companies."
+    description,
+    openGraph: {
+      type: "website",
+      siteName: title,
+      title,
+      description,
+      url: SITE_URL
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description
+    },
+    alternates: {
+      canonical: SITE_URL
+    }
   };
 }
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageSections from "@/components/page-sections";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -35,6 +36,17 @@ async function getPage(slug: string): Promise<Page | null> {
     params: { slug },
     revalidate
   });
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  if (reservedSlugs.has(params.slug) || params.slug === placeholderPageSlug) return {};
+  const page = await getPage(params.slug);
+  if (!page) return {};
+
+  return {
+    title: page.title,
+    alternates: { canonical: `/${params.slug}` }
+  };
 }
 
 export default async function DynamicPage({ params }: PageProps) {

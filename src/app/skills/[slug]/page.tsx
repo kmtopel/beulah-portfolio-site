@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -40,6 +41,26 @@ async function getSkill(slug: string): Promise<Skill | null> {
     params: { slug },
     revalidate
   });
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  if (params.slug === placeholderSkillSlug) return {};
+  const skill = await getSkill(params.slug);
+  if (!skill) return {};
+
+  const ogImage = skill.coverImage
+    ? urlForImage(skill.coverImage).width(1200).height(630).url()
+    : undefined;
+
+  return {
+    title: skill.title,
+    description: skill.summary || `${skill.title} — a core skill by Beulah Peters`,
+    alternates: { canonical: `/skills/${params.slug}` },
+    openGraph: {
+      title: skill.title,
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630 }] } : {})
+    }
+  };
 }
 
 export default async function SkillPage({ params }: PageProps) {
