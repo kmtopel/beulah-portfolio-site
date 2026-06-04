@@ -100,6 +100,7 @@ export default function Footer({ socialLinks }: FooterProps) {
           })}
         </div>
       ) : null}
+      <p className="mt-4 text-center text-sm opacity-40">&copy; {new Date().getFullYear()} Beulah Peters</p>
     </footer>
   );
 }
