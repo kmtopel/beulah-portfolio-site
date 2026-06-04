@@ -27,7 +27,7 @@ export default function PageSections({ sections }: PageSectionsProps) {
 
         if (section._type === "richTextBlock") {
           return (
-            <section key={section._key} className="max-w-none prose prose-lg">
+            <section key={section._key} className="max-w-none prose prose-lg [&>*+*]:mt-4">
               <PortableContent value={section.content} />
             </section>
           );
