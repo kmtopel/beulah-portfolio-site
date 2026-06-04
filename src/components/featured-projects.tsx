@@ -23,7 +23,7 @@ export default function FeaturedProjects({ projects }: FeaturedProjectsProps) {
             href={project.slug?.current ? `/projects/${project.slug.current}` : "#"}
             className="group block bg-white shadow-lg hover:shadow-xl border border-[var(--vanilla-custard)] rounded-lg overflow-hidden transition-shadow"
           >
-            <div className="relative h-48">
+            <div className="relative h-48 overflow-hidden">
               {project.featuredImage ? (
                 <Image
                   src={urlForImage(project.featuredImage).width(800).height(600).url()}
