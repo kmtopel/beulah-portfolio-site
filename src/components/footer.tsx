@@ -86,7 +86,7 @@ export default function Footer({ socialLinks }: FooterProps) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="flex items-center justify-center size-10 rounded-full text-[var(--dark-olive-green)] opacity-50 hover:opacity-100 transition-opacity"
+                className="flex items-center justify-center size-10 rounded-full bg-[var(--dark-olive-green)] text-white hover:opacity-80 transition-opacity"
               >
                 {LucideIcon ? (
                   <LucideIcon className="size-5" strokeWidth={1.5} />
