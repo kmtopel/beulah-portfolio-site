@@ -151,19 +151,21 @@ export default function ProjectGrid({ projects, categories, skills, clients }: P
               <Link
                 key={project._id}
                 href={project.slug?.current ? `/projects/${project.slug.current}` : "#"}
-                className="grid bg-white border border-[var(--vanilla-custard)] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto]"
+                className="group grid bg-white shadow-lg hover:shadow-xl border border-[var(--vanilla-custard)] rounded-[14px] overflow-hidden [grid-template-rows:180px_auto] transition-shadow"
               >
-                {imageUrl ? (
-                  <Image
-                    src={imageUrl}
-                    alt={project.featuredImage?.alt || project.title}
-                    width={800}
-                    height={600}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="bg-[linear-gradient(120deg,var(--tea-green),var(--tertiary))] w-full h-full" />
-                )}
+                <div className="relative overflow-hidden">
+                  {imageUrl ? (
+                    <Image
+                      src={imageUrl}
+                      alt={project.featuredImage?.alt || project.title}
+                      width={800}
+                      height={600}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                  ) : (
+                    <div className="bg-[linear-gradient(120deg,var(--tea-green),var(--tertiary))] w-full h-full" />
+                  )}
+                </div>
                 <div className="gap-1 grid p-4">
                   <h2 className="text-3xl">{project.title}</h2>
                 </div>

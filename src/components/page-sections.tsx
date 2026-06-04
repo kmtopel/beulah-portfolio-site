@@ -9,43 +9,46 @@ type PageSectionsProps = {
   sections: PageSection[];
 };
 
+function renderSection(section: PageSection) {
+  if (section._type === "heroBlock") {
+    return <Hero heroData={section} />;
+  }
+
+  if (section._type === "clientSliderBlock") {
+    return <ClientSlider heading={section.heading} clients={section.clients || []} />;
+  }
+
+  if (section._type === "featuredProjectsBlock") {
+    return <FeaturedProjects projects={section.projects || []} />;
+  }
+
+  if (section._type === "richTextBlock") {
+    return (
+      <div className="max-w-none prose prose-lg [&>*+*]:mt-4">
+        <PortableContent value={section.content} />
+      </div>
+    );
+  }
+
+  if (section._type === "splitContentBlock" || section._type === "splitContent") {
+    return <SplitContent block={section} />;
+  }
+
+  return (
+    <div className="bg-[var(--tertiary)] p-4 border border-[var(--vanilla-custard)] rounded-[14px] text-sm">
+      Unsupported section type.
+    </div>
+  );
+}
+
 export default function PageSections({ sections }: PageSectionsProps) {
   return (
     <div className="gap-8 md:gap-10 lg:gap-14 grid">
-      {sections.map((section, index) => {
-        if (section._type === "heroBlock") {
-          return <Hero key={section._key} heroData={section} />;
-        }
-
-        if (section._type === "clientSliderBlock") {
-          return <ClientSlider key={section._key} heading={section.heading} clients={section.clients || []} />;
-        }
-
-        if (section._type === "featuredProjectsBlock") {
-          return <FeaturedProjects key={section._key} projects={section.projects || []} />;
-        }
-
-        if (section._type === "richTextBlock") {
-          return (
-            <section key={section._key} className="max-w-none prose prose-lg [&>*+*]:mt-4">
-              <PortableContent value={section.content} />
-            </section>
-          );
-        }
-
-        if (section._type === "splitContentBlock" || section._type === "splitContent") {
-          return <SplitContent key={section._key} block={section} />;
-        }
-
-        return (
-          <section
-            key={`unsupported-section-${index}`}
-            className="bg-[var(--tertiary)] p-4 border border-[var(--vanilla-custard)] rounded-[14px] text-sm"
-          >
-            Unsupported section type.
-          </section>
-        );
-      })}
+      {sections.map((section) => (
+        <div key={section._key} data-name={`block/${section._type}`}>
+          {renderSection(section)}
+        </div>
+      ))}
     </div>
   );
 }
