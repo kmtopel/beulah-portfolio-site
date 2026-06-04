@@ -178,6 +178,8 @@ export default function ClientSlider({ heading, clients }: ClientSliderProps) {
           const slug = client.slug?.current;
           const title = client.title || "Client";
           const logo = client.logo?.asset ? client.logo : null;
+          const logoUrl = logo ? urlForImage(logo).width(400).fit("max").url() : null;
+          const isSvg = logo?.asset?._ref?.endsWith("-svg");
 
           return (
             <div key={client._id} className="shrink-0 flex">
@@ -185,10 +187,17 @@ export default function ClientSlider({ heading, clients }: ClientSliderProps) {
                 href={slug ? `/projects?client=${slug}` : "/projects"}
                 className="group flex items-center justify-center px-10 md:px-16 py-4"
               >
-                {logo ? (
+                {logoUrl && isSvg ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={logoUrl}
+                    alt={logo?.alt || title}
+                    className="opacity-60 group-hover:opacity-100 brightness-0 w-auto h-16 md:h-20 object-contain transition-opacity"
+                  />
+                ) : logoUrl ? (
                   <Image
-                    src={urlForImage(logo).width(400).fit("max").url()}
-                    alt={logo.alt || title}
+                    src={logoUrl}
+                    alt={logo?.alt || title}
                     width={300}
                     height={200}
                     className="opacity-60 group-hover:opacity-100 brightness-0 w-auto h-16 md:h-20 object-contain transition-opacity"
