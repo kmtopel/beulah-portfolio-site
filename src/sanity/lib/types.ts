@@ -32,6 +32,7 @@ export type SkillSummary = {
   slug?: {
     current: string;
   };
+  hasDetailPage?: boolean;
 };
 
 export type Project = {

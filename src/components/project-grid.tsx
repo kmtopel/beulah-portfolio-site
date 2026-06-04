@@ -128,13 +128,13 @@ export default function ProjectGrid({ projects, categories, skills, clients }: P
         </div>
 
         {activeSkill ? (() => {
-          const activeSkillTitle = skills.find((s) => s.slug?.current === activeSkill)?.title;
-          return activeSkillTitle ? (
+          const activeSkillData = skills.find((s) => s.slug?.current === activeSkill);
+          return activeSkillData?.hasDetailPage ? (
             <Link
               href={`/skills/${activeSkill}`}
               className="inline-flex items-center gap-2 px-5 py-2.5 text-base font-medium text-white bg-[#17453a] rounded-full hover:opacity-90 transition-opacity w-fit"
             >
-              Read more about my experience with {activeSkillTitle} &rarr;
+              Read more about my experience with {activeSkillData.title} &rarr;
             </Link>
           ) : null;
         })() : null}

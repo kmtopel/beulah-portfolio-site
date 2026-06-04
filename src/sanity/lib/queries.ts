@@ -141,7 +141,7 @@ export const pageBySlugQuery = `
 
 export const projectFiltersQuery = `{
   "categories": *[_type == "projectCategory"] | order(title asc) { _id, title, slug },
-  "skills": *[_type == "skill"] | order(title asc) { _id, title, slug },
+  "skills": *[_type == "skill"] | order(title asc) { _id, title, slug, hasDetailPage },
   "clients": *[_type == "client"] | order(title asc) { _id, title, slug }
 }`;
 
