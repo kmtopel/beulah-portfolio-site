@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { sanityFetch } from "@/sanity/lib/client";
+import { hasRequiredEnv } from "@/sanity/lib/env";
+import { urlForImage } from "@/sanity/lib/image";
+import { sanityFetch } from "@/sanity/lib/live";
+import { skillsQuery } from "@/sanity/lib/queries";
+import type { Skill } from "@/sanity/lib/types";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Skills",
   description: "Core skills and capabilities — branding, content creation, product photography, and more.",
   alternates: { canonical: "/skills" }
 };
-import { hasRequiredEnv } from "@/sanity/lib/env";
-import { urlForImage } from "@/sanity/lib/image";
-import { skillsQuery } from "@/sanity/lib/queries";
-import type { Skill } from "@/sanity/lib/types";
-
-export const revalidate = 120;
 
 async function getSkills(): Promise<Skill[]> {
-  const skills = await sanityFetch<Skill[]>({ query: skillsQuery, revalidate });
-  return skills || [];
+  const { data } = await sanityFetch({ query: skillsQuery });
+  return (data as Skill[]) || [];
 }
 
 export default async function SkillsPage() {

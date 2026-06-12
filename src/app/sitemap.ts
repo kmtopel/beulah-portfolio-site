@@ -1,14 +1,14 @@
 import type { MetadataRoute } from "next";
-import { sanityFetch } from "@/sanity/lib/client";
+import { buildTimeFetch } from "@/sanity/lib/client";
 import { projectSlugsQuery, skillSlugsQuery, pageSlugsQuery } from "@/sanity/lib/queries";
 
 const SITE_URL = "https://beulahpeters.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [projectSlugs, skillSlugs, pageSlugs] = await Promise.all([
-    sanityFetch<Array<{ slug: string }>>({ query: projectSlugsQuery }),
-    sanityFetch<Array<{ slug: string }>>({ query: skillSlugsQuery }),
-    sanityFetch<Array<{ slug: string }>>({ query: pageSlugsQuery })
+    buildTimeFetch<Array<{ slug: string }>>(projectSlugsQuery).then((r) => r || []),
+    buildTimeFetch<Array<{ slug: string }>>(skillSlugsQuery).then((r) => r || []),
+    buildTimeFetch<Array<{ slug: string }>>(pageSlugsQuery).then((r) => r || [])
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [

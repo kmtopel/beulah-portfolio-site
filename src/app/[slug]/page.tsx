@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageSections from "@/components/page-sections";
-import { sanityFetch } from "@/sanity/lib/client";
-import { pageBySlugQuery, pageSlugsQuery } from "@/sanity/lib/queries";
+import { sanityFetch } from "@/sanity/lib/live";
+import { pageBySlugQuery } from "@/sanity/lib/queries";
 import type { Page } from "@/sanity/lib/types";
 
-export const revalidate = 120;
-export const dynamicParams = false;
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 const reservedSlugs = new Set(["home", "projects", "skills", "studio"]);
-const placeholderPageSlug = "__no-pages__";
 
 type PageProps = {
   params: {
@@ -18,28 +15,16 @@ type PageProps = {
   };
 };
 
-export async function generateStaticParams() {
-  const slugs = await sanityFetch<Array<{ slug: string }>>({ query: pageSlugsQuery, revalidate });
-
-  const params =
-    slugs
-      ?.map((item) => item.slug)
-      .filter((slug): slug is string => Boolean(slug) && !reservedSlugs.has(slug))
-      .map((slug) => ({ slug })) || [];
-
-  return params.length ? params : [{ slug: placeholderPageSlug }];
-}
-
 async function getPage(slug: string): Promise<Page | null> {
-  return sanityFetch<Page>({
+  const { data } = await sanityFetch({
     query: pageBySlugQuery,
-    params: { slug },
-    revalidate
+    params: { slug }
   });
+  return data as Page | null;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if (reservedSlugs.has(params.slug) || params.slug === placeholderPageSlug) return {};
+  if (reservedSlugs.has(params.slug)) return {};
   const page = await getPage(params.slug);
   if (!page) return {};
 
@@ -51,10 +36,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function DynamicPage({ params }: PageProps) {
   if (reservedSlugs.has(params.slug)) {
-    notFound();
-  }
-
-  if (params.slug === placeholderPageSlug) {
     notFound();
   }
 

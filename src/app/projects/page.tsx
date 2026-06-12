@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Projects",
   description: "Portfolio of design, branding, and content creation projects by Beulah Peters.",
   alternates: { canonical: "/projects" }
 };
-import { sanityFetch } from "@/sanity/lib/client";
+import { sanityFetch } from "@/sanity/lib/live";
 import { projectsQuery, projectFiltersQuery } from "@/sanity/lib/queries";
 import type { Project, ProjectCategory, SkillSummary, Client } from "@/sanity/lib/types";
 import ProjectGrid from "@/components/project-grid";
-
-export const revalidate = 60;
 
 type FilterData = {
   categories: ProjectCategory[];
@@ -20,12 +20,13 @@ type FilterData = {
 };
 
 async function getProjects(): Promise<Project[]> {
-  const projects = await sanityFetch<Project[]>({ query: projectsQuery, revalidate });
-  return projects || [];
+  const { data } = await sanityFetch({ query: projectsQuery });
+  return (data as Project[]) || [];
 }
 
 async function getFilters(): Promise<FilterData> {
-  const filters = await sanityFetch<FilterData>({ query: projectFiltersQuery, revalidate });
+  const { data } = await sanityFetch({ query: projectFiltersQuery });
+  const filters = data as FilterData | null;
   return {
     categories: filters?.categories || [],
     skills: filters?.skills || [],

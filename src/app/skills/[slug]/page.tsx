@@ -3,16 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PortableContent } from "@/components/portable-content";
-import { sanityFetch } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/image";
-import { skillBySlugQuery, skillSlugsQuery, projectsBySkillSlugQuery } from "@/sanity/lib/queries";
+import { sanityFetch } from "@/sanity/lib/live";
+import { skillBySlugQuery, projectsBySkillSlugQuery } from "@/sanity/lib/queries";
 import type { Skill, Project } from "@/sanity/lib/types";
 import { ArrowRight } from "lucide-react";
 
-export const revalidate = 120;
-export const dynamicParams = false;
-export const dynamic = "force-static";
-const placeholderSkillSlug = "__no-skills__";
+export const dynamic = "force-dynamic";
 
 type PageProps = {
   params: {
@@ -20,31 +17,15 @@ type PageProps = {
   };
 };
 
-export async function generateStaticParams() {
-  const slugs = await sanityFetch<Array<{ slug: string }>>({
-    query: skillSlugsQuery,
-    revalidate
-  });
-
-  const params =
-    slugs
-      ?.map((item) => item.slug)
-      .filter((slug): slug is string => Boolean(slug))
-      .map((slug) => ({ slug })) || [];
-
-  return params.length ? params : [{ slug: placeholderSkillSlug }];
-}
-
 async function getSkill(slug: string): Promise<Skill | null> {
-  return sanityFetch<Skill>({
+  const { data } = await sanityFetch({
     query: skillBySlugQuery,
-    params: { slug },
-    revalidate
+    params: { slug }
   });
+  return data as Skill | null;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if (params.slug === placeholderSkillSlug) return {};
   const skill = await getSkill(params.slug);
   if (!skill) return {};
 
@@ -64,18 +45,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function SkillPage({ params }: PageProps) {
-  if (params.slug === placeholderSkillSlug) {
-    notFound();
-  }
-
-  const [skill, relatedProjects] = await Promise.all([
+  const [skill, relatedProjectsResult] = await Promise.all([
     getSkill(params.slug),
-    sanityFetch<Pick<Project, "_id" | "title" | "slug" | "featuredImage">[]>({
+    sanityFetch({
       query: projectsBySkillSlugQuery,
-      params: { skillSlug: params.slug },
-      revalidate
-    }).then((res) => res || [])
+      params: { skillSlug: params.slug }
+    })
   ]);
+
+  const relatedProjects = (relatedProjectsResult.data as Pick<Project, "_id" | "title" | "slug" | "featuredImage">[]) || [];
 
   if (!skill) {
     notFound();

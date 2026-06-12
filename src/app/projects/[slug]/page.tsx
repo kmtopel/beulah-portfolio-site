@@ -3,16 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PortableContent } from "@/components/portable-content";
-import { sanityFetch } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/image";
-import { projectBySlugQuery, projectSlugsQuery } from "@/sanity/lib/queries";
+import { sanityFetch } from "@/sanity/lib/live";
+import { projectBySlugQuery } from "@/sanity/lib/queries";
 import type { Project } from "@/sanity/lib/types";
 import { ChevronLeft } from "lucide-react";
 
-export const revalidate = 60;
-export const dynamicParams = false;
-export const dynamic = "force-static";
-const placeholderProjectSlug = "__no-projects__";
+export const dynamic = "force-dynamic";
 
 type PageProps = {
   params: {
@@ -21,30 +18,14 @@ type PageProps = {
 };
 
 async function getProject(slug: string): Promise<Project | null> {
-  return sanityFetch<Project>({
+  const { data } = await sanityFetch({
     query: projectBySlugQuery,
-    params: { slug },
-    revalidate
+    params: { slug }
   });
-}
-
-export async function generateStaticParams() {
-  const slugs = await sanityFetch<Array<{ slug: string }>>({
-    query: projectSlugsQuery,
-    revalidate
-  });
-
-  const params =
-    slugs
-      ?.map((item) => item.slug)
-      .filter((slug): slug is string => Boolean(slug))
-      .map((slug) => ({ slug })) || [];
-
-  return params.length ? params : [{ slug: placeholderProjectSlug }];
+  return data as Project | null;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if (params.slug === placeholderProjectSlug) return {};
   const project = await getProject(params.slug);
   if (!project) return {};
 
@@ -64,10 +45,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function ProjectPage({ params }: PageProps) {
-  if (params.slug === placeholderProjectSlug) {
-    notFound();
-  }
-
   const project = await getProject(params.slug);
 
   if (!project) {

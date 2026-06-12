@@ -1,27 +1,27 @@
 import PageSections from "@/components/page-sections";
-import { sanityFetch } from "@/sanity/lib/client";
 import { hasRequiredEnv } from "@/sanity/lib/env";
+import { sanityFetch } from "@/sanity/lib/live";
 import { pageBySlugQuery } from "@/sanity/lib/queries";
 import type { Page } from "@/sanity/lib/types";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 async function getHomePage(): Promise<Page | null> {
-  const homeByName = await sanityFetch<Page>({
+  const { data: homeByName } = await sanityFetch({
     query: pageBySlugQuery,
-    params: { slug: "home" },
-    revalidate
+    params: { slug: "home" }
   });
 
   if (homeByName) {
-    return homeByName;
+    return homeByName as Page;
   }
 
-  return sanityFetch<Page>({
+  const { data: homeBySlash } = await sanityFetch({
     query: pageBySlugQuery,
-    params: { slug: "/" },
-    revalidate
+    params: { slug: "/" }
   });
+
+  return homeBySlash as Page | null;
 }
 
 export default async function HomePage() {

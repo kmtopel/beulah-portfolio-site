@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Archivo_Narrow, Cormorant_Garamond, Manrope } from "next/font/google";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { sanityFetch } from "@/sanity/lib/client";
+import SanityLiveOnPublic from "@/components/sanity-live-on-public";
+import { buildTimeFetch } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import type { SiteSettings } from "@/sanity/lib/types";
 import "./globals.css";
@@ -27,8 +28,8 @@ const accentFont = Archivo_Narrow({
   weight: ["500", "600", "700"]
 });
 
-async function getSiteSettings() {
-  return sanityFetch<SiteSettings>({ query: siteSettingsQuery, revalidate: 300 });
+async function getSiteSettings(): Promise<SiteSettings | null> {
+  return buildTimeFetch<SiteSettings>(siteSettingsQuery);
 }
 
 const SITE_URL = "https://beulahpeters.com";
@@ -91,6 +92,7 @@ export default async function RootLayout({
           <main className="mx-auto px-5 pt-8 pb-20 w-full max-w-[1020px]">{children}</main>
           <Footer socialLinks={siteSettings?.socialLinks} brandLabel={siteSettings?.headerBrandLabel} />
         </div>
+        <SanityLiveOnPublic />
       </body>
     </html>
   );

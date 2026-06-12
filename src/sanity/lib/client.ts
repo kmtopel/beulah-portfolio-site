@@ -9,27 +9,19 @@ export const client = createClient({
   useCdn
 });
 
-type SanityFetchArgs = {
-  query: string;
-  params?: Record<string, string | number | boolean | null | undefined>;
-  revalidate?: number;
-};
-
-export async function sanityFetch<T>({
-  query,
-  params = {},
-  revalidate = 60
-}: SanityFetchArgs): Promise<T | null> {
-  if (!hasRequiredEnv) {
-    return null;
-  }
-
+/**
+ * Simple fetch for build-time contexts (generateStaticParams, sitemap)
+ * where defineLive's sanityFetch can't run (no request scope for draftMode).
+ */
+export async function buildTimeFetch<T>(
+  query: string,
+  params: Record<string, string | number | boolean | null | undefined> = {}
+): Promise<T | null> {
+  if (!hasRequiredEnv) return null;
   try {
-    return await client.fetch<T>(query, params, {
-      next: { revalidate }
-    });
+    return await client.fetch<T>(query, params);
   } catch (error) {
-    console.warn("Sanity fetch failed.", error);
+    console.warn("Sanity build-time fetch failed.", error);
     return null;
   }
 }
