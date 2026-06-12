@@ -33,3 +33,5 @@ next-env.d.ts
 .sanity/
 dist/
 .claude/launch.json
+docs/Beulah-Peters-CMS-Guide.docx
+docs/Beulah-Peters-CMS-Guide.pdf
